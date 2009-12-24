@@ -1,0 +1,415 @@
+================
+Portlets manager
+================
+
+Portlets manager практически тозже самое что и ViewletManager, отличие
+в том что portlet manager может иметь конфигурацию, контекст для
+изменения конфигурации. Так же portlet manager может содержать любые
+портлеты зарегестрированные в системе, это зависит от конфигурации.
+
+  >>> from zope import interface, component, schema
+  >>> from zojax.portlet import interfaces, portlet, manager
+
+Реализация `Portlet manager`
+
+  >>> class ILeftColumn(interface.Interface):
+  ...     """ Left columns portlets """
+
+
+Создадим Portlet manager:
+
+  >>> LeftColumn = manager.PortletManager(
+  ...     'left', None, provides=(ILeftColumn,), title=u'Left column')
+  >>> component.provideAdapter(
+  ...     LeftColumn, (None, None, None), interfaces.IPortletManager, name='left')
+
+
+Now we have to instantiate it:
+
+  >>> from zope.location import Location
+  >>> from zope.annotation.interfaces import IAttributeAnnotatable
+  >>> from zojax.extensions.interfaces import IExtensible
+
+  >>> class Content(Location):
+  ...     interface.implements(IAttributeAnnotatable, IExtensible)
+  >>> content = Content()
+
+  >>> class Content2(Location):
+  ...     interface.implements(IAttributeAnnotatable)
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> request = TestRequest()
+
+  >>> from zope.publisher.interfaces.browser import IBrowserView
+  >>> class View(object):
+  ...     interface.implements(IBrowserView)
+  ...     def __init__(self, context, request):
+  ...         pass
+  >>> view = View(content, request)
+
+  >>> leftColumn = LeftColumn(content, request, view)
+
+So initially nothing gets rendered:
+
+  >>> leftColumn.update()
+  >>> leftColumn.render()
+  u''
+
+
+Let's register some portlets
+
+  >>> from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+  
+  >>> class WeatherBox(portlet.PortletBase):
+  ...     interface.implements(interfaces.IPortlet)
+  ...
+  ...     def render(self):
+  ...         return u'<div class="box">It is sunny today!</div>'
+
+  >>> component.provideAdapter(
+  ...     WeatherBox, (None,None,None,None), interfaces.IPortlet, name='weather')
+
+  >>> leftColumn.update()
+  >>> leftColumn.render()
+  u''
+
+We need assign portlets to manager
+
+  >>> leftColumn.portletIds = ('weather',)
+  >>> leftColumn.update()
+  >>> leftColumn.render()
+  u'<div class="box">It is sunny today!</div>'
+
+
+`zojax:portletManager` directive
+--------------------------------
+
+  >>> from zope.configuration import xmlconfig
+  >>> import zojax.portlet
+  >>> context = xmlconfig.file('meta.zcml', zojax.portlet)
+
+Very simple portletManager
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portletManager
+  ...     name="portletManager1"
+  ...     title="Portlet Manager 1"
+  ...     description="Test portlet manager 1" />
+  ... 
+  ... </configure>''', context)
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager1')
+  >>> pm.portletIds = ('weather',)
+  >>> pm.update()
+  >>> pm.title
+  u'Portlet Manager 1'
+  >>> pm.description
+  u'Test portlet manager 1'
+  >>> pm.__parent__
+  <zojax.portlet.TESTS.Content ...>
+  >>> pm.render()
+  u'<div class="box">It is sunny today!</div>'
+
+
+Portlet with custom implementation
+
+  >>> class MyPortletManager(object):
+  ...     pass
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portletManager
+  ...     name="portletManager2"
+  ...     title="Portlet Manager 2"
+  ...     class="zojax.portlet.TESTS.MyPortletManager" />
+  ... 
+  ... </configure>''', context)
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager2')
+  >>> isinstance(pm, MyPortletManager)
+  True
+
+Provides/Layer
+
+  >>> class IMyManager(interface.Interface):
+  ...     pass
+
+  >>> class IMyLayer(interface.Interface):
+  ...     pass
+
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portletManager
+  ...     name="portletManager3"
+  ...     title="Portlet Manager 3"
+  ...     provides="zojax.portlet.TESTS.IMyManager"
+  ...     layer="zojax.portlet.TESTS.IMyLayer" />
+  ... 
+  ... </configure>''', context)
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager3')
+  Traceback (most recent call last):
+  ...
+  ComponentLookupError: ...
+
+Request should support layer
+
+  >>> interface.alsoProvides(request, IMyLayer)
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager3')
+  >>> pm.title
+  u'Portlet Manager 3'
+
+  >>> IMyManager.providedBy(pm)
+  True
+
+
+Custom portlet manager view
+
+  >>> import os, tempfile
+  >>> filename = tempfile.mkstemp()[1]
+  >>> open(filename, 'wb').write('''
+  ... <div>
+  ...   Test
+  ...   <tal:block content="structure
+  ...         python:''.join([p.render() for p in context.portlets])" />
+  ... </div>''')
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <include package="zojax.layout" file="meta.zcml" />
+  ... 
+  ...   <zojax:pageletType
+  ...      name="portlet.manager.view"
+  ...      interface=".interfaces.IPortletManagerView" />
+  ... 
+  ...   <zojax:portletManager
+  ...     name="portletManager4"
+  ...     provides="zojax.portlet.TESTS.IMyManager"
+  ...     title="Portlet Manager 4" />
+  ... 
+  ...   <zojax:pagelet
+  ...     type="portlet.manager.view"
+  ...     for="zojax.portlet.TESTS.IMyManager"
+  ...     template="%s" />
+  ... 
+  ... </configure>'''%filename, context)
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager4')
+  >>> pm.portletIds = ('weather',)
+  >>> pm.update()
+  >>> print pm.render()
+  <div>
+    Test
+    <div class="box">It is sunny today!</div>
+  </div>
+
+  >>> os.unlink(filename)
+
+  >>> xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portletManager
+  ...     name="portletManager3"
+  ...     title="Portlet Manager 3"
+  ...     template="unknown.pt" />
+  ... 
+  ... </configure>''', context)
+  Traceback (most recent call last):
+  ...
+  ZopeXMLConfigurationError: ...
+
+
+Manager configuration schema
+----------------------------
+
+  >>> class IPortletManager5(interface.Interface):
+  ...     
+  ...     email = schema.TextLine(
+  ...         title = u'E-mail',
+  ...         default = u'test@localhost.com',
+  ...         required = True)
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portletManager
+  ...     name="portletManager5"
+  ...     title="Portlet Manager 5"
+  ...     schema="zojax.portlet.TESTS.IPortletManager5" />
+  ... 
+  ... </configure>''', context)
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager5')
+
+  >>> pm
+  <zojax.portlet.manager.PortletManager<portletManager5> object at ...>
+  >>> pm.email
+  u'test@localhost.com'
+  >>> pm.email = u'test2@localhost.com'
+
+
+Data saved in content annotations
+---------------------------------
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager5')
+  >>> pm.email
+  u'test2@localhost.com'
+
+  >>> pm = component.getMultiAdapter(
+  ...     (Content2, request, view), interfaces.IPortletManager, 'portletManager5')
+  >>> pm.email
+  u'test@localhost.com'
+
+
+Portlets manager with status
+----------------------------
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portletManager
+  ...     name="portletManager6"
+  ...     title="Portlet Manager 6"
+  ...     class="zojax.portlet.manager.PortletManagerWithStatus"
+  ...     schema="zojax.portlet.interfaces.IPortletManagerWithStatus" />
+  ... 
+  ... </configure>''', context)
+
+  >>> content1 = Content()
+  >>> content1.__parent__ = content
+
+  >>> content2 = Content2()
+  >>> content2.__parent__ = content1
+
+We can set portlets
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager6')
+  >>> pm.portletIds = ('weather',)
+
+But portlets is not available because manager status is unset
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager6')
+  >>> pm.update()
+  >>> pm.render()
+  u''
+
+  >>> pm1 = component.getMultiAdapter(
+  ...     (content1, request, view), interfaces.IPortletManager, 'portletManager6')
+  >>> pm1.update()
+  >>> pm1.render()
+  u''
+
+  >>> pm2 = component.getMultiAdapter(
+  ...     (content2, request, view), interfaces.IPortletManager, 'portletManager6')
+  >>> pm2.update()
+  >>> pm2.render()
+  u''
+
+  >>> pm.status = interfaces.ENABLED
+  >>> pm.portletIds = ('weather',)
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager6')
+  >>> pm.update()
+  >>> pm.render()
+  u'<div class="box">It is sunny today!</div>'
+
+  >>> pm1 = component.getMultiAdapter(
+  ...     (content1, request, view), interfaces.IPortletManager, 'portletManager6')
+  >>> pm1.update()
+  >>> pm1.render()
+  u'<div class="box">It is sunny today!</div>'
+
+  >>> pm2 = component.getMultiAdapter(
+  ...     (content2, request, view), interfaces.IPortletManager, 'portletManager6')
+  >>> pm2.update()
+  >>> pm2.render()
+  u'<div class="box">It is sunny today!</div>'
+
+  >>> pm2.status is interfaces.UNSET
+  True
+
+  >>> pm1.status = interfaces.DISABLED
+
+  >>> pm1 = component.getMultiAdapter(
+  ...     (content1, request, view), interfaces.IPortletManager, 'portletManager6')
+  >>> pm1.update()
+  >>> pm1.render()
+  u''
+
+  >>> pm2 = component.getMultiAdapter(
+  ...     (content2, request, view), interfaces.IPortletManager, 'portletManager6')
+  >>> pm2.update()
+  >>> pm2.render()
+  u''
+
+
+just test
+
+  >>> pm2 = component.getMultiAdapter(
+  ...     (Content2, request, view), interfaces.IPortletManager, 'portletManager6')
+  >>> pm2.portletIds = ('weather',)
+  >>> pm2.update()
+  >>> pm2.render()
+  u''
+
+
+Portlet type
+------------
+
+We can use different portlet types for filtering allowed portlets
+
+  >>> class IMyPortlets(interface.Interface):
+  ...     pass
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portletManager
+  ...     name="portletManager7"
+  ...     title="Portlet Manager 7"
+  ...     portlettype="zojax.portlet.TESTS.IMyPortlets" />
+  ... 
+  ... </configure>''', context)
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager7')
+  >>> pm.portletIds = ('weather',)
+  Traceback (most recent call last):
+  ...
+  WrongContainedType: ...weather...
+
+let's register portlet with new portlet type
+
+  >>> component.provideAdapter(
+  ...     WeatherBox, (None, None, None, None), IMyPortlets, name='weather2')
+
+  >>> pm.portletIds = ('weather2',)
+  >>> pm.update()
+  >>> pm.render()
+  u'<div class="box">It is sunny today!</div>'
+

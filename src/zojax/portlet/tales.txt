@@ -1,0 +1,127 @@
+==============================
+The TALES `portlet` expression
+==============================
+
+The ``portlet`` expression will look up the name of the portlet,
+call it and return the HTML content. The first step, however, will be to
+register our portlet with the component architecture:
+
+  >>> from zope import interface, component
+  >>> from zojax.portlet import portlet, tales, interfaces
+
+  >>> class MyPortlet(object):
+  ...     
+  ...     def render(self):
+  ...         return u'<div class="box">It is sunny today!</div>'
+
+  >>> MyPortletClass = portlet.Portlet('myportlet', MyPortlet, title=u'My portlet')
+  >>> component.provideAdapter(
+  ...     MyPortletClass,
+  ...     (None, None, None, None), interfaces.IPortlet, name='myportlet')
+
+Let's now create a view using a page template:
+
+  >>> import os, tempfile
+  >>> temp_dir = tempfile.mkdtemp()
+  >>> templateFileName = os.path.join(temp_dir, 'template.pt')
+  >>> open(templateFileName, 'w').write('''
+  ... <html>
+  ...   <body>
+  ...     <h1>My Web Page</h1>
+  ...     <div class="left-column">
+  ...       <tal:block replace="structure portlet:myportlet" />
+  ...     </div>
+  ...     <div class="main">
+  ...       Content here
+  ...     </div>
+  ...   </body>
+  ... </html>
+  ... ''')
+
+  # python2.4 compatibility
+  >>> try:
+  ...     tmp = __file__
+  ... except NameError:
+  ...     from zojax.layout import tests
+  ...     __file__ = tests.__file__
+
+Next we register the template as a view (browser page) for all objects:
+
+  >>> from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+  >>> FrontPage = SimpleViewClass(templateFileName, name='main.html')
+
+  >>> component.provideAdapter(
+  ...     FrontPage,
+  ...     (interface.Interface, interface.Interface), interface.Interface,
+  ...     name='main.html')
+
+Let's create a content object that can be viewed:
+
+  >>> class Content(object):
+  ...     interface.implements(interface.Interface)
+
+  >>> content = Content()
+
+Also we should register tales expression
+
+  >>> from zope.app.pagetemplate.metaconfigure import registerType
+  >>> registerType('portlet', tales.TALESPortletExpression)
+
+Finally we look up the view and render it.
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> request = TestRequest()
+
+  >>> view = component.getMultiAdapter((content, request), name='main.html')
+  >>> print view().strip()
+  <html>
+    <body>
+      <h1>My Web Page</h1>
+      <div class="left-column">
+        <div class="box">It is sunny today!</div>
+      </div>
+      <div class="main">
+        Content here
+      </div>
+    </body>
+  </html>
+
+If portlet is not exist, just return empty string
+
+  >>> open(templateFileName, 'w').write('''
+  ... <html>
+  ...   <body>
+  ...     <h1>My Web Page</h1>
+  ...     <div class="left-column">
+  ...       <tal:block replace="structure portlet:unknown" />
+  ...     </div>
+  ...     <div class="main">
+  ...       Content here
+  ...     </div>
+  ...   </body>
+  ... </html>
+  ... ''')
+
+  >>> from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+  >>> ErrorPage = SimpleViewClass(templateFileName, name='error.html')
+  >>> component.provideAdapter(
+  ...     ErrorPage,
+  ...     (interface.Interface, interface.Interface),
+  ...     interface.Interface,
+  ...     name='main.html')
+
+  >>> view = component.getMultiAdapter((content, request), name='main.html')
+  >>> print view().strip()
+  <html>
+    <body>
+      <h1>My Web Page</h1>
+      <div class="left-column">
+      </div>
+      <div class="main">
+        Content here
+      </div>
+    </body>
+  </html>
+
+  >>> import shutil
+  >>> shutil.rmtree(temp_dir)

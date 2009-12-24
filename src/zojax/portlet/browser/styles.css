@@ -1,0 +1,126 @@
+/* zrt-cssregistry: */
+
+@media all {
+
+  .z-portlet {
+    background: contentBackgroundColor;
+    margin-bottom: 1em;
+  }
+
+  .z-portlet a {
+    text-decoration: none;
+  }
+
+  .z-portlet h2,
+  .z-portlet-header {
+    margin: 0;
+    padding: 0 0.5em 0.25em 1em;
+    font-size: 100%;
+    font-weight: normal;
+    text-transform: textTransform;
+    background-color: globalBackgroundColor;
+    border: borderWidth borderStyle globalBorderColor;
+  }
+
+  .z-portlet-header a {
+    color: fontColor;
+  }
+
+  .z-portlet-feed {
+    float: right;
+    display: block;
+  }
+
+  .z-portlet-body {
+    margin: 0;
+    border: borderWidth borderStyle globalBorderColor;
+    border-width: 0 borderWidth borderWidth borderWidth;
+  }
+
+  .z-portlet-item,
+  .z-portlet-selecteditem {
+    padding: 0.5em 1em;
+  }
+
+  .z-portlet-item span a {
+    border-bottom: 1px dotted discreetColor;
+  }
+
+  .z-portlet-item span a:hover {
+    border-bottom: 1px solid discreetColor;
+  }
+
+  .z-portlet-item-details {
+    display: block;
+    color: fontColor;
+    text-align: right;
+    font-size: 95%;
+  }
+
+  .z-portlet-item-details a {
+    color: discreetColor;
+    border-bottom: 1px dotted discreetColor;
+  }
+
+  .z-portlet-item-details a:hover {
+    border-bottom: 1px solid discreetColor;
+  }
+
+  .z-portlet-footer {
+    padding: 0.2em;
+    text-align: right;
+    background-color: evenRowBackgroundColor;
+    margin: 0;
+    padding: 0.25em 1em;
+    border: borderWidth borderStyle globalBorderColor;
+    border-style: none borderStyle borderStyle borderStyle;
+    text-align: right;
+  }
+
+  .z-portlet-nodecoration .z-portlet-header,
+  .z-portlet-nodecoration .z-portlet-footer {
+    display: none
+  }
+
+  .z-portlet-nodecoration .z-portlet-body {
+    border: none
+  }
+
+  .z-portlet ul.z-listing {
+    padding: 0;
+  }
+
+  .z-portlet ul.z-listing li {
+    margin: 0;
+    padding: 0.15em 0.2em 0.2em 0.4em;
+  }
+
+  .z-portlet ul.z-listing li .z-listing-icon {
+    float: left;
+    padding-top: 0px;
+    padding-right: 0.5em;
+  }
+
+  .z-portlet ul.z-listing li a,
+  .z-portlet ul.z-listing li .z-listing-details a {
+    color: linkColor;
+    border: 0;
+    text-decoration: none;
+  }
+
+  .z-portlet ul.z-listing li a:hover,
+  .z-portlet ul.z-listing li .z-listing-details a:hover {
+    color: globalExtraColor;
+    text-decoration: underline;
+  }
+
+  .z-portlet ul.z-listing li span {
+    border-bottom: 0;
+  }
+
+  .z-portlet-preview {
+    padding-top: 1em;
+    margin-bottom: 2em;
+  }
+
+}

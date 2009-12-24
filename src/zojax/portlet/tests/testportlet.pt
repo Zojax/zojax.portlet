@@ -1,0 +1,5 @@
+
+<div tal:content="request/principal/id"></div>
+<div tal:content="request/principal/title"></div>
+
+<tal:block content="portlet:portlet1" />

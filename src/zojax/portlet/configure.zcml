@@ -1,0 +1,64 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:i18n="http://namespaces.zope.org/i18n"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:tales="http://namespaces.zope.org/tales"
+   i18n_domain="zojax.portlet">
+
+  <permission
+     id="zojax.ManagePortlets"
+     title="Manage site portlets" />
+
+  <!-- 'portlet' chameleon expression -->
+  <utility
+     name="portlet"
+     factory=".tales.PortletTranslator" />
+
+  <!-- 'portlet' tales expression -->
+  <tales:expressiontype
+     name="portlet"
+     handler=".tales.TALESPortletExpression" />
+
+  <!-- portlets vocabulary -->
+  <utility
+     name="zojax portlets"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     factory=".vocabulary.Portlets" />
+
+  <!-- pagelet types -->
+  <zojax:pageletType
+     name="portlet.view"
+     interface=".interfaces.IPortletView" />
+
+  <zojax:pageletType
+     name="portlet.config"
+     interface=".interfaces.IPortletConfigurationView" />
+
+  <zojax:pageletType
+     name="portlet.manager.view"
+     interface=".interfaces.IPortletManagerView" />
+
+  <!-- extension -->
+  <zojax:extension
+     name="portlets"
+     title="Portlets"
+     description="Portlets configuration."
+     schema=".interfaces.IPortletsExtension"
+     class=".extension.PortletsExtension"
+     type="zojax.extensions.interfaces.IPageExtension"
+     permission="zojax.ManagePortlets">
+    <require
+       permission="zope.Public"
+       interface=".interfaces.IPortletsExtension" />
+  </zojax:extension>
+
+  <!-- cache -->
+  <include file="cache.zcml" />
+
+  <!-- translations -->
+  <i18n:registerTranslations directory="locales"/>
+
+  <!-- browser views -->
+  <include package=".browser" />
+
+</configure>

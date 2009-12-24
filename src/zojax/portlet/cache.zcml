@@ -1,0 +1,12 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zcml="http://namespaces.zope.org/zcml"
+   zcml:configure="condition installed:zojax.cache">
+
+  <subscriber handler=".cache.portletHandler" />
+
+  <class class=".cache.PortletCacheTag">
+    <allow interface="zojax.cache.interfaces.ITag" />
+  </class>
+
+</configure>

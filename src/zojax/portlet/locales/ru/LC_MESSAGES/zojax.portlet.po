@@ -1,0 +1,68 @@
+# #############################################################################
+#
+# Copyright (c) 2009 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+# #############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Tue Jan  6 15:30:30 2009\n"
+"PO-Revision-Date: 2008-10-29 15:28+0600\n"
+"Last-Translator: Nikolay Kim <fafhrd91@gmail.com>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/portlet/browser/manager.pt:3
+msgid "Configure portlets"
+msgstr "Управление портлетами"
+
+#: src/zojax/portlet/browser/portlet.pt:6
+msgid "Back to \"${managerTitle}\" portlets manager."
+msgstr "Назад к \"${managerTitle}\"."
+
+#: src/zojax/portlet/configproperty.py:121
+msgid "Can't set field"
+msgstr "Не возможно установить поле"
+
+#: src/zojax/portlet/configproperty.py:126
+msgid "Field is readonly"
+msgstr "Поле только для чтения"
+
+#: src/zojax/portlet/configure.zcml:10
+msgid "Manage site portlets"
+msgstr "Управление портлетами"
+
+#: src/zojax/portlet/configure.zcml:37
+msgid "Portlets configuration."
+msgstr "Конфигурация портлетов."
+
+#: src/zojax/portlet/interfaces.py:102 src/zojax/portlet/configure.zcml:37
+msgid "Portlets"
+msgstr "Портлеты"
+
+#: src/zojax/portlet/interfaces.py:112
+msgid "Status"
+msgstr "Статус"
+
+#: src/zojax/portlet/interfaces.py:33
+msgid "Enabled"
+msgstr "Включено"
+
+#: src/zojax/portlet/interfaces.py:34
+msgid "Disabled"
+msgstr "Выключено"
+
+#: src/zojax/portlet/interfaces.py:35
+msgid "Unset"
+msgstr "Не установлено"

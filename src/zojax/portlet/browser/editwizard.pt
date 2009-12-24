@@ -1,0 +1,13 @@
+<tal:block i18n:domain="zojax.portlet">
+  <h2>Portlet managers</h2>
+
+  <div class="z-form-fieldset">
+    <ul class="z-listing" tal:define="url view/context0/@@absolute_url">
+      <li tal:repeat="item view/managers">
+        <a tal:attributes="href string:$url/${item/name}/"
+           tal:content="item/title"></a>
+        <div class="byline" tal:content="item/description"></div>
+      </li>
+    </ul>
+  </div>
+</tal:block>

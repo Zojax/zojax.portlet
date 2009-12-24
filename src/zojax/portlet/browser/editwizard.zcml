@@ -1,0 +1,26 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zcml="http://namespaces.zope.org/zcml"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   zcml:condition="installed zojax.content.forms"
+   i18n_domain="zojax.portlet">
+
+  <!-- edit wizard -->
+  <zojax:pagelet
+     name="portlets"
+     type="form.subform"
+     for="zojax.content.type.interfaces.IContent
+	  zojax.content.forms.interfaces.IPresentationStep"
+     template="editwizard.pt"
+     class=".editwizard.ContentPortletManagers"
+     permission="zojax.ManagePortlets"
+     provides="zojax.layoutform.interfaces.IPageletFormView"
+     weight="200" />
+
+  <subscriber
+     factory=".editwizard.ContentPortletManagersPublisher"
+     for="zojax.content.forms.interfaces.IPresentationStep *"
+     provides="zojax.wizard.interfaces.IPublisherPlugin" />
+  
+</configure>

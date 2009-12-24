@@ -1,0 +1,8 @@
+<tal:block content="structure context/@@pagelet/portlet.config" />
+
+<br />
+<div class="z-form-fieldset" tal:define="manager nocall:view/context/manager">
+  <a tal:attributes="href string:${context/@@absolute_url}/../" i18n:translate="">
+    Back to "<tal:block content="manager/title" i18n:name="managerTitle" />" portlets manager.
+  </a>
+</div>

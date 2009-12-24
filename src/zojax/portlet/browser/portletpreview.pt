@@ -1,0 +1,6 @@
+<h1 class="z-form-label" i18n:translate="">Preview</h1>
+<div class="z-portlet-preview">
+  <iframe height="100%" width="100%"
+  		  tal:attributes="src string:${context/context/@@public_absolute_url}/preview">
+  </iframe>
+</div>

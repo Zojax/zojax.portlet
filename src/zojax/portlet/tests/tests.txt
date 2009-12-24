@@ -1,0 +1,400 @@
+==================
+Portlets Extension
+==================
+
+    >>> from zope import component, interface
+    >>> from zope.testbrowser.testing import Browser
+    >>> from zope.app.component.hooks import setSite
+    >>> from zope.app.testing.functional import getRootFolder
+    >>> from zojax.extensions.interfaces import IExtensible
+    >>> from zojax.portlet.tests.tests import TestContent
+
+    >>> root = getRootFolder()
+    >>> interface.alsoProvides(root, IExtensible)
+    >>> sm = root.getSiteManager()
+    >>> setSite(root)
+
+    >>> content = TestContent(title=u'Test content')
+    >>> root['content'] = content
+    >>> content2 = TestContent(title=u'Test content 2')
+    >>> root['content']['content2'] = content2
+
+    >>> actor = Browser()
+    >>> actor.handleErrors = False
+    >>> actor.addHeader("Authorization", "Basic mgr:mgrpw")
+    >>> actor.open("http://localhost/++extensions++/")
+    >>> actor.getLink('Portlets').click()
+    >>> print actor.contents
+    <html>
+    ...
+    <h1>Portlets</h1>
+    <div class="z-page-description">Portlets configuration.</div>
+    ...
+    <ul class="z-listing">
+      <li>
+         <a href="columns.left/">Left column portlets</a>
+    <div class="byline"></div>
+      </li> <li>
+          <a href="columns.right/">Right column portlets</a>
+          <div class="byline"></div>
+        </li>
+    </ul>
+    ...
+    </html>
+
+    >>> actor.getLink('Left column portlets').click()
+    >>> actor.open('http://localhost/++extensions++/portlets/columns.left/?form.widgets.portletIds:list=portlet1&form.buttons.save=Save')
+
+    >>> actor.open("http://localhost/test.html")
+    >>> print actor.contents
+    <html>
+      <body>
+        ...
+        <table>
+          <tr>
+           <td><div class="portlet">Portlet1</div></td>
+           <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
+               <div>Manager</div></div></div></div></td>
+           <td></td>
+          </tr>
+        </table>
+      </body>
+    </html>
+
+Portlet
+
+    >>> actor.open('http://localhost/++extensions++/portlets/columns.left/?form.widgets.portletIds:list=portlet2&form.buttons.save=Save')
+
+    >>> actor.open("http://localhost/test.html")
+    >>> print actor.contents
+    <html>
+      <body>
+        ...
+        <table>
+          <tr>
+           <td><div class="portlet">Portlet2, E-mail: test@localhost.com</div></td>
+           <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
+              <div>Manager</div></div></div></div></td>
+           <td></td>
+          </tr>
+        </table>
+      </body>
+    </html>
+
+    >>> actor.open("http://localhost/++extensions++/portlets/columns.left/")
+    >>> print actor.contents
+    <html>
+    ...
+    ...<div class="z-form-fieldset">
+      <h2>Configure portlets</h2>
+      <ul class="z-listing">
+        <li>
+          <span><a href="portlet2/">Portlet2</a></span>
+          <div></div>
+        </li>
+      </ul>
+    </div>...
+    ...
+    </html>
+
+    >>> actor.getLink('Portlet2').click()
+    >>> actor.getControl('E-mail').value = 'test2@localhost.com'
+    >>> actor.getControl(name='form.buttons.save').click()
+
+We have portlet preview on edit form
+
+    >>> print actor.contents
+    <html>
+    ...
+    ...<iframe height="100%" width="100%" src="http://localhost/portlets/columns.left/portlet2/preview">
+    ...
+    </html>
+
+Preview contents
+
+    >>> actor.open('http://localhost/portlets/columns.left/portlet2/preview')
+    >>> print actor.contents
+    <div class="z-portlet-preview-content-wrapper"><div class="portlet">Portlet2, E-mail: test2@localhost.com</div></div>
+
+    >>> actor.open("http://localhost/++extensions++/portlets/columns.left/")
+    >>> actor.getLink('Portlet2').click()
+    >>> actor.getLink('Back to "Left column portlets" portlets manager.').click()
+    >>> actor.url
+    'http://localhost/++extensions++/portlets/columns.left/'
+
+    >>> actor.open("http://localhost/test.html")
+    >>> print actor.contents
+    <html>
+      <body>
+        ...
+        <table>
+          <tr>
+           <td><div class="portlet">Portlet2, E-mail: test2@localhost.com</div></td>
+           <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
+             <div>Manager</div></div></div></div></td>
+           <td></td>
+          </tr>
+        </table>
+      </body>
+    </html>
+
+
+Edit wizard
+-----------
+
+    >>> from zojax.content.type.interfaces import IContent
+    >>> interface.alsoProvides(getRootFolder(), IContent)
+
+    >>> actor.open('http://localhost/context.html')
+
+    >>> actor.getLink('Presentation').click()
+    >>> print actor.contents
+    <html>
+    ...
+    <h2>Portlet managers</h2>
+    <div class="z-form-fieldset">
+      <ul class="z-listing">
+        <li>
+          <a href="http://localhost/context.html/presentation/pm-columns.left/">Left column portlets</a>
+          <div class="byline"></div>
+        </li> <li>
+            <a href="http://localhost/context.html/presentation/pm-columns.right/">Right column portlets</a>
+            <div class="byline"></div>
+          </li>
+      </ul>
+    </div>
+    ...
+    </html>
+
+    >>> actor.getLink('Left column portlets').click()
+    >>> actor.open('http://localhost/context.html/presentation/pm-columns.left/?form.widgets.portletIds:list=portlet1&form.buttons.save=Save')
+
+    >>> actor.open("http://localhost/test.html")
+    >>> print actor.contents
+    <html>
+      <body>
+        ...
+        <table>
+          <tr>
+           <td><div class="portlet">Portlet1</div></td>
+           <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
+             <div>Manager</div></div></div></div></td>
+           <td></td>
+          </tr>
+        </table>
+      </body>
+    </html>
+
+
+Portlet manager with status
+---------------------------
+
+We set portlet manager with status on root object
+
+    >>> actor.open('http://localhost/++extensions++/portlets/columns.right/?form.widgets.portletIds:list=portlet1&form.widgets.status:list=1&form.buttons.save=Save')
+
+    >>> actor.open("http://localhost/test.html")
+    >>> print actor.contents
+    <html>
+      <body>
+        ...
+        <table>
+          <tr>
+           ...
+           <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
+              <div>Manager</div></div></div></div></td>
+           <td><div class="portlet">Portlet1</div></td>
+          </tr>
+        </table>
+      </body>
+    </html>
+
+And we'll have same portlets on each contained objects:
+
+    >>> actor.open("http://localhost/content/test.html")
+    >>> print actor.contents
+    <html>
+      <body>
+        ...
+        <table>
+          <tr>
+           ...
+           <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
+              <div>Manager</div></div></div></div></td>
+           <td><div class="portlet">Portlet1</div></td>
+          </tr>
+        </table>
+      </body>
+    </html>
+
+    >>> actor.open("http://localhost/content/content2/test.html")
+    >>> print actor.contents
+    <html>
+      <body>
+        ...
+        <table>
+          <tr>
+           ...
+           <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
+              <div>Manager</div></div></div></div></td>
+           <td><div class="portlet">Portlet1</div></td>
+          </tr>
+        </table>
+      </body>
+    </html>
+
+But we can override for particular object
+
+   >>> actor.open('http://localhost/content/content2/++extensions++/portlets/columns.right/?form.widgets.portletIds:list=portlet2&form.widgets.status:list=1&form.buttons.save=Save')
+
+
+   >>> actor.open("http://localhost/content/content2/test.html")
+   >>> print actor.contents
+   <html>
+      <body>
+        ...
+        <table>
+          <tr>
+           ...
+           <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
+              <div>Manager</div></div></div></div></td>
+           <td><div class="portlet">Portlet2, E-mail: test@localhost.com</div></td>
+          </tr>
+        </table>
+      </body>
+   </html>
+
+
+Access to portlet managers from presentation step
+
+   >>> actor.open("http://localhost/content/content2/context.html")
+   >>> actor.getLink('Left column portlets').click()
+   >>> actor.url
+   'http://localhost/content/content2/context.html/presentation/pm-columns.left/'
+
+   >>> actor.open('http://localhost/content/content2/context.html/presentation/pm-columns.left-unknown/')
+   Traceback (most recent call last):
+   ...
+   NotFound: Object: ...
+
+We set portlet manager status to unset back
+  >>> actor.open('http://localhost/content/content2/++extensions++/portlets/columns.right/')
+  >>> actor.getControl('Status').displayValue = ['Unset']
+  >>> actor.getControl('Save').click()
+
+
+Also we can copy settings from parent manager, but we should have setting to unset
+
+  >>> actor.open('http://localhost/content/++extensions++/portlets/columns.right/')
+  >>> actor.getControl('Status').displayValue = ['Unset']
+  >>> actor.getControl('Save').click()
+
+  >>> actor.getControl('Copy portlet settings from parent manager').click()
+  >>> print actor.contents
+  <html>
+  ...<div class="statusMessage">Setting has been copied</div>...
+  ...
+  </html>
+
+  >>> actor.getControl('Status').displayValue
+  ['Enabled']
+
+  >>> actor.open("http://localhost/content/test.html")
+  >>> print actor.contents
+  <html>
+    <body>
+      ...
+      <table>
+        <tr>
+         ...
+         <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
+            <div>Manager</div></div></div></div></td>
+         <td><div class="portlet">Portlet1</div></td>
+        </tr>
+      </table>
+    </body>
+  </html>
+
+Portlets and managers can be accessed through publisher:
+
+    >>> from zojax.portlet.browser.interfaces import IPortletPublicMarker
+    >>> from zope.publisher.browser import TestRequest
+    >>> request = TestRequest()
+    >>> manager = component.getMultiAdapter((root, request), interface.Interface, 'portlets').publishTraverse(request, 'columns.left')
+    >>> manager
+    <zojax.portlet.manager.PortletManager<columns.left> object ...>
+
+    >>> from zope.publisher.interfaces import IPublishTraverse
+    >>> portlet = component.getMultiAdapter((manager, request), IPublishTraverse).publishTraverse(request, 'portlet1')
+    >>> portlet
+    <zojax.portlet.portlet.Portlet<portlet1> object ...>
+
+    >>> IPortletPublicMarker.providedBy(portlet)
+    True
+
+Portlet publisher works also for Portlet managers with status:
+
+    >>> manager_status = component.getMultiAdapter((root, request), interface.Interface, 'portlets').publishTraverse(request, 'columns.right')
+    >>> portlet_status = component.getMultiAdapter((manager_status, request), IPublishTraverse).publishTraverse(request, 'portlet1')
+    >>> portlet_status
+    <zojax.portlet.portlet.Portlet<portlet1> object ...>
+
+    >>> IPortletPublicMarker.providedBy(portlet_status)
+    True
+
+    >>> manager_status = component.getMultiAdapter((content2, request), interface.Interface, 'portlets').publishTraverse(request, 'columns.right')
+    >>> portlet_status = component.getMultiAdapter((manager_status, request), IPublishTraverse).publishTraverse(request, 'portlet2')
+    Traceback (most recent call last):
+    ...
+    NotFound: ...
+
+    >>> portlet_status = component.getMultiAdapter((manager_status, request), IPublishTraverse).publishTraverse(request, 'portlet1')
+    >>> portlet_status
+    <zojax.portlet.portlet.Portlet<portlet1> object ...>
+
+    >>> IPortletPublicMarker.providedBy(portlet_status)
+    True
+
+We have public absolute url view:
+
+    >>> component.getMultiAdapter((portlet, request), interface.Interface, 'public_absolute_url')()
+    u'http://127.0.0.1/portlets/columns.left/portlet1'
+
+When run on portlet manager with status == unset, then it will point to parent portlet manager
+    >>> component.getMultiAdapter((portlet_status, request), interface.Interface, 'public_absolute_url')()
+    u'http://127.0.0.1/content/portlets/columns.right/portlet1'
+
+We have not found if we try to get portlets view separately
+
+    >>> actor.open('http://localhost/portlets')
+    Traceback (most recent call last):
+    ...
+    NotFound: Object: <...folder.Folder object ...>, name: 'portlets'
+
+Same with trying to get portlet manager, cause we have no default view for portlet manager
+
+    >>> actor.open('http://localhost/portlets/columns.left')
+    Traceback (most recent call last):
+    ...
+    NotFound: Object: <zojax.portlet.manager.PortletManager<columns.left> object ...>, name: u'index.html'
+
+
+Correct Not Found on incorrect portlet id
+
+    >>> actor.open('http://localhost/portlets/columns.left/some')
+    Traceback (most recent call last):
+    ...
+    NotFound: Object: <zojax.portlet.manager.PortletManager<columns.left> object ...>, name: u'some'
+
+    >>> setSite(None)
+
+
+portlet tales expression
+------------------------
+
+    >>> actor.open('http://localhost/testportlet.html')
+    >>> print actor.contents
+    <html>
+    ...<div class="portlet">Portlet1</div>...
+    </html>
+

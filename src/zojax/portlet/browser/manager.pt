@@ -1,0 +1,13 @@
+<br />
+<div class="z-form-fieldset" i18n:domain="zojax.portlet">
+  <h2 i18n:translate="">Configure portlets</h2>
+
+  <ul class="z-listing">
+    <li tal:repeat="portlet view/listPortlets">
+      <span><a tal:content="portlet/title" 
+	       tal:attributes="href string:${portlet/name}/"
+	       tal:omit-tag="not:portlet/schema"></a></span>
+      <div tal:content="portlet/description"></div>
+    </li>
+  </ul>
+</div>

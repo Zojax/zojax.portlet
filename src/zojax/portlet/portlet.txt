@@ -1,0 +1,288 @@
+=======
+Portlet
+=======
+
+  >>> from zope import interface, component, schema
+  >>> from zojax.portlet import interfaces, portlet, manager
+
+Реализация
+
+  >>> class MyPortlet(object):
+  ...     
+  ...     def render(self):
+  ...         return u'<div class="box">It is sunny today!</div>'
+
+Создадим Portlet:
+
+  >>> from zojax.portlet.portlet import Portlet
+  >>> MyPortletClass = Portlet('myportlet', MyPortlet, title=u'Left column')
+  >>> component.provideAdapter(
+  ...     MyPortletClass,
+  ...     (None, None, None, None), interfaces.IPortlet, name='myportlet')
+
+Теперь нам нужен контент и view:
+
+  >>> from zope.location import Location
+  >>> from zope.annotation.interfaces import IAttributeAnnotatable
+  >>> from zojax.extensions.interfaces import IExtensible
+
+  >>> class Content(Location):
+  ...     interface.implements(IAttributeAnnotatable, IExtensible)
+  >>> content = Content()
+
+  >>> from zope.publisher.browser import TestRequest
+  >>> request = TestRequest()
+
+  >>> from zope.publisher.interfaces.browser import IBrowserView
+  >>> class View(object):
+  ...     interface.implements(IBrowserView)
+  ...     debug=False
+  ...     def __init__(self, context, request):
+  ...         self.context = context
+  ...         self.request = request
+  >>> view = View(content, request)
+
+Let's render portlet:
+
+  >>> portlet = component.getMultiAdapter(
+  ...     (content, request, None, None), interfaces.IPortlet, 'myportlet')
+  >>> portlet.update()
+  >>> portlet.render()
+  u'<div class="box">It is sunny today!</div>'
+
+  >>> portlet.__parent__
+  <zojax.portlet.TESTS.Content ...>
+
+
+`zojax:portlet` directive
+=========================
+
+  >>> from zope.configuration import xmlconfig
+  >>> import zojax.portlet
+  >>> context = xmlconfig.file('meta.zcml', zojax.portlet)
+
+Very simple portlet
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portlet
+  ...     name="portlet1"
+  ...     title="Portlet 1"
+  ...     description="Test portlet 1" />
+  ... 
+  ... </configure>''', context)
+
+  >>> portlet = component.getMultiAdapter(
+  ...     (content, request, None, None), interfaces.IPortlet, 'portlet1')
+  >>> portlet.title
+  u'Portlet 1'
+  >>> portlet.description
+  u'Test portlet 1'
+  >>> portlet.update()
+  >>> portlet.render()
+  u''
+
+
+Portlet configuration schema
+----------------------------
+
+  >>> class IPortlet5(interface.Interface):
+  ...     
+  ...     email = schema.TextLine(
+  ...         title = u'E-mail',
+  ...         default = u'test@localhost.com',
+  ...         required = True)
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portlet
+  ...     name="portlet5"
+  ...     title="Portlet 5"
+  ...     schema="zojax.portlet.TESTS.IPortlet5" />
+  ... 
+  ... </configure>''', context)
+
+  >>> portlet = component.getMultiAdapter(
+  ...     (content, request, None, None), interfaces.IPortlet, 'portlet5')
+  >>> portlet.update()
+  >>> portlet
+  <zojax.portlet.portlet.Portlet<portlet5> object at ...>
+  >>> portlet.email
+  u'test@localhost.com'
+
+  >>> portlet.email = u'test2@localhost.com'
+
+
+Portlet with custom implementation
+----------------------------------
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portlet
+  ...     name="portlet2"
+  ...     title="Portlet 2"
+  ...     class="zojax.portlet.TESTS.MyPortlet" />
+  ... 
+  ... </configure>''', context)
+
+  >>> portlet = component.getMultiAdapter(
+  ...     (content, request, None, None), interfaces.IPortlet, 'portlet2')
+  >>> isinstance(portlet, MyPortlet)
+  True
+  >>> portlet.render()
+  u'<div class="box">It is sunny today!</div>'
+
+
+Custom portlet template
+-----------------------
+
+  >>> import os, tempfile
+  >>> filename = tempfile.mkstemp()[1]
+  >>> open(filename, 'wb').write('''
+  ... <div>
+  ...   Test
+  ... </div>''')
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portlet
+  ...     name="portlet3"
+  ...     title="Portlet 3"
+  ...     template="%s" />
+  ... 
+  ... </configure>'''%filename, context)
+
+  >>> portlet = component.getMultiAdapter(
+  ...     (content, request, None, None), interfaces.IPortlet, 'portlet3')
+  >>> portlet.update()
+  >>> print portlet.render()
+  <div>
+    Test
+  </div>
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portlet
+  ...     name="portlet3"
+  ...     title="Portlet 3"
+  ...     template="unknown.pt" />
+  ... 
+  ... </configure>''', context)
+  Traceback (most recent call last):
+  ...
+  ZopeXMLConfigurationError: ...
+
+
+Custom portlet renderer
+-----------------------
+
+  >>> class IPortlet4(interface.Interface):
+  ...     pass
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portlet
+  ...     name="portlet4"
+  ...     title="Portlet 4"
+  ...     provides="zojax.portlet.TESTS.IPortlet4"
+  ...     template="%s" />
+  ... 
+  ... </configure>'''%filename, context)
+
+  >>> portlet = component.getMultiAdapter(
+  ...     (content, request, None, None), interfaces.IPortlet, 'portlet4')
+  >>> portlet.update()
+  >>> print portlet.render()
+  <div>
+    Test
+  </div>
+
+Let's define new renderer
+
+  >>> class MyRenderer(object):
+  ...     interface.implements(interfaces.IPortletView)
+  ...     
+  ...     def __init__(self, context, request):
+  ...         self.context = context
+  ...         self.request = request
+  ...     
+  ...     def update(self):
+  ...         pass
+  ...     
+  ...     def render(self):
+  ...         return u'Test portlet4'
+
+  >>> component.getSiteManager().registerAdapter(
+  ...     MyRenderer, (IPortlet4, interface.Interface), interfaces.IPortletView)
+
+  >>> print portlet.render()
+  Test portlet4
+
+This is equivalent of next pagelet definition
+
+  <zojax:pagelet
+     for="zojax.portlet.TESTS.IPortlet4"
+     template="templet.pt"
+     provides="zojax.portlet.interfaces.IPortletView"
+     permission="zope.Public" />
+
+
+Portlet configuration schema
+----------------------------
+
+  >>> class IPortletConfig(interface.Interface):
+  ...     
+  ...     email = schema.TextLine(
+  ...         title = u'E-mail',
+  ...         default = u'test@localhost.com',
+  ...         required = True)
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ... 
+  ...   <zojax:portlet
+  ...     name="portlet5"
+  ...     title="Portlet 5"
+  ...     schema="zojax.portlet.TESTS.IPortletConfig"
+  ...     template="%s" />
+  ... 
+  ...   <zojax:portletManager
+  ...     name="portletManager"
+  ...     title="Portlet Manager" />
+  ... 
+  ... </configure>'''%filename, context)
+
+  >>> pm = component.getMultiAdapter(
+  ...     (content, request, view), interfaces.IPortletManager, 'portletManager')
+
+  >>> portlet = component.getMultiAdapter(
+  ...     (content, request, pm, None), interfaces.IPortlet, 'portlet5')
+  >>> portlet.email
+  u'test@localhost.com'
+
+schema data is persistent
+
+  >>> portlet.email = u'test2@localhost.com'
+
+  >>> portlet = component.getMultiAdapter(
+  ...     (content, request, pm, None), interfaces.IPortlet, 'portlet5')
+  >>> portlet.email
+  u'test2@localhost.com'
+
+
+clean up
+
+  >>> os.unlink(filename)

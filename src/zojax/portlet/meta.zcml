@@ -1,0 +1,19 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:meta="http://namespaces.zope.org/meta">
+
+  <meta:directives namespace="http://namespaces.zope.org/zojax">
+
+    <meta:directive
+       name="portlet"
+       schema=".zcml.IPortletDirective"
+       handler=".zcml.portletDirective" />
+
+    <meta:directive
+       name="portletManager"
+       schema=".zcml.IPortletManagerDirective"
+       handler=".zcml.portletManagerDirective" />
+
+  </meta:directives>
+
+</configure>
