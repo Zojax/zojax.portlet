@@ -1,0 +1,126 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   i18n_domain="zojax.portlet">
+
+  <include file="editwizard.zcml" />
+
+  <!-- extension -->
+  <zojax:pagelet
+     name="index.html"
+     for="..interfaces.IPortletsExtension"
+     template="extension.pt"
+     class=".extension.ExtensionView"
+     permission="zojax.ManagePortlets" />
+
+  <adapter
+     for="..interfaces.IPortletsExtension *"
+     factory="z3c.traverser.traverser.PluggableTraverser"
+     provides="zope.publisher.interfaces.IPublishTraverse" />
+
+  <subscriber
+     factory=".extension.PublisherPlugin"
+     provides="z3c.traverser.interfaces.ITraverserPlugin" />
+
+  <!-- portlets manager -->
+  <zojax:pagelet
+     name="index.html"
+     for=".interfaces.IPortletManagerConfigMarker"
+     class=".manager.PortletManagerConfiguration"
+     permission="zojax.ManagePortlets" />
+
+  <zojax:pagelet
+     type="form.subform"
+     for=".interfaces.IPortletManagerConfigMarker
+	  .manager.PortletManagerConfiguration"
+     template="manager.pt"
+     class=".manager.ModifyPortlets" />
+
+  <adapter
+     for=".interfaces.IPortletManagerConfigMarker *"
+     factory="z3c.traverser.traverser.PluggableTraverser"
+     provides="zope.publisher.interfaces.IPublishTraverse" />
+
+  <subscriber
+     factory=".manager.PublisherPlugin"
+     provides="z3c.traverser.interfaces.ITraverserPlugin" />
+
+  <adapter
+     for=".interfaces.IPortletManagerPublicMarker *"
+     factory="z3c.traverser.traverser.PluggableTraverser"
+     provides="zope.publisher.interfaces.IPublishTraverse" />
+
+  <subscriber
+     factory=".manager.PublicPublisherPlugin"
+     provides="z3c.traverser.interfaces.ITraverserPlugin" />
+
+  <adapter
+     factory=".manager.portletManagerPortlets" />
+
+  <adapter
+     factory=".manager.portletManagerWithStatusPortlets" />
+
+  <adapter
+     for="..interfaces.IPortletManager zope.publisher.interfaces.http.IHTTPRequest"
+     name="public_absolute_url"
+     factory=".portlet.PortletManagerPublicAbsoluteURL"
+     permission="zope.Public"
+     provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <class class=".portlet.PortletManagerPublicAbsoluteURL">
+    <allow interface="zope.traversing.browser.interfaces.IAbsoluteURL"/>
+  </class>
+
+  <adapter
+     for="..interfaces.IPortlet zope.publisher.interfaces.http.IHTTPRequest"
+     name="public_absolute_url"
+     factory=".portlet.PortletPublicAbsoluteURL"
+     permission="zope.Public"
+     provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <class class=".portlet.PortletPublicAbsoluteURL">
+    <allow interface="zope.traversing.browser.interfaces.IAbsoluteURL"/>
+  </class>
+
+  <!-- portlets access -->
+  <adapter
+     name="portlets"
+     for="* zope.publisher.interfaces.http.IHTTPRequest"
+     provides="zope.publisher.interfaces.IPublishTraverse"
+     factory=".portlets.Portlets" />
+
+  <class class=".portlets.Portlets">
+    <allow interface="zope.publisher.interfaces.IPublishTraverse" />
+  </class>
+
+  <!-- portlet -->
+  <zojax:pagelet
+     name="index.html"
+     for=".interfaces.IPortletConfigMarker"
+     template="portlet.pt"
+     permission="zojax.ManagePortlets" />
+
+  <zojax:pagelet
+     type="portlet.config"
+     for="..interfaces.IPortlet"
+     class=".portlet.PortletConfiguration"
+     permission="zojax.ManagePortlets" />
+
+  <zojax:pagelet
+     name="preview"
+     layout="page"
+     for="..interfaces.IPortlet"
+     template="portletpreviewitem.pt"
+     permission="zojax.ManagePortlets" />
+
+  <zojax:pagelet
+     for=".portlet.PortletConfiguration"
+     template="portletpreview.pt"
+     type="form.viewspaceInfo" />
+
+  <!-- styles -->
+  <zojax:resourceinclude
+     name="zojax-portlet.css"
+     library="zojax" type="stylesheet" file="styles.css" filetype="zrt" />
+
+</configure>

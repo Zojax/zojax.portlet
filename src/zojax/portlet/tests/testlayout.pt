@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <div tal:content="structure provider:statusMessage"></div>
+
+    <table>
+      <tr>
+  <td tal:define="context maincontext"
+      tal:content="structure provider:columns.left"></td>
+  <td tal:content="structure view/render"></td>
+  <td tal:define="context maincontext"
+      tal:content="structure provider:columns.right"></td>
+      </tr>
+    </table>
+  </body>
+</html>

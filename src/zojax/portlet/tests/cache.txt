@@ -1,0 +1,67 @@
+=================
+Portlet Cache Tag
+=================
+
+    >>> from zope import interface
+    >>> from zope.location import Location
+    >>> from zope.traversing.interfaces import IContainmentRoot
+
+    >>> from zojax.cache import default
+    >>> default.localData.cache = default.defaultCacheConfiglet
+
+    >>> from zojax.portlet import cache
+    >>> from zojax.portlet.interfaces import IPortlet
+    >>> from zojax.portlet.cache import PortletModificationTag as PortletTag
+
+    >>> class Content(Location):
+    ...     pass
+
+    >>> content1 = Content()
+    >>> content1.__name__ = 'content1'
+    >>> content1.__parent__ = None
+    >>> interface.alsoProvides(content1, IContainmentRoot)
+
+    >>> content2 = Content()
+    >>> content2.__name__ = 'content2'
+    >>> content2.__parent__ = content1
+
+    >>> class Portlet(Location):
+    ...     interface.implements(IPortlet)
+    ...     manager = None
+    ...     def __init__(self, context, name):
+    ...         self.context = context
+    ...         self.__name__ = name
+
+    >>> portlet1 = Portlet(content1, 'test-portlet')
+    >>> portlet2 = Portlet(content2, 'test-portlet')
+
+    >>> print PortletTag.query(portlet1)
+    None
+    >>> print PortletTag.query(portlet2)
+    None
+
+    >>> PortletTag.update(portlet2)
+
+    >>> val = PortletTag.query(portlet2)
+    >>> val is not None
+    True
+
+    >>> val == PortletTag.query(portlet1)
+    True
+
+    >>> PortletTag('', portlet2)
+    ((u'tag:portlet:test-portlet', ...), ('context', u'/content2'))
+
+
+    >>> PortletTag.update(portlet1)
+
+    >>> PortletTag.query(portlet1) == PortletTag.query(portlet2)
+    False
+
+    >>> default.localData.cache = default.noCache
+
+    >>> portlet1.manager = portlet2
+    >>> portlet2.manager = Portlet(content1, 'test-manager')
+
+    >>> cache.PortletId(' :postfix')(portlet1)
+    u'test-manager:test-portlet:portlet: test-portlet :postfix'
