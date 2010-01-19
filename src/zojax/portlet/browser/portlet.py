@@ -18,6 +18,7 @@ $Id$
 from zope.component import getMultiAdapter
 from zope.proxy import removeAllProxies
 from zope.traversing.browser import absoluteURL, AbsoluteURL
+from zope.traversing.browser.interfaces import IAbsoluteURL
 
 from zojax.layoutform import Fields, PageletEditForm
 
@@ -40,6 +41,10 @@ class PortletConfiguration(PageletEditForm):
 
     def nextURL(self):
         return self.request.getURL()
+
+
+def publicAbsoluteURL(ob, request):
+    return getMultiAdapter((ob, request), IAbsoluteURL, name="public_absolute_url")()
 
 
 class PortletPublicAbsoluteURL(AbsoluteURL):
