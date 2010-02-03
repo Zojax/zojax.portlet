@@ -105,6 +105,9 @@ class IPortletManager(IContentProvider):
     def getPortletData(name):
         """ return portlet persistent data container """
 
+    def updateAndRender():
+        """ update and render portlet manager """
+        
 
 class IPortletManagerConfiguration(interface.Interface):
     """ portlet manager configuration """

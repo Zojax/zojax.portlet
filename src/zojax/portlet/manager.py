@@ -118,6 +118,13 @@ class PortletManagerBase(Location):
             data[name] = pdata
 
         return pdata
+    
+     def updateAndRender(self):
+        self.update()
+        if self.isAvailable():
+            return self.render()
+        else:
+            return u''
 
 
 class PortletManagerWithStatus(object):
