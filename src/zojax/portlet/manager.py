@@ -119,7 +119,7 @@ class PortletManagerBase(Location):
 
         return pdata
     
-     def updateAndRender(self):
+    def updateAndRender(self):
         self.update()
         if self.isAvailable():
             return self.render()
