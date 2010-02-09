@@ -21,6 +21,7 @@ from zope.traversing.browser import absoluteURL, AbsoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 
 from zojax.layoutform import Fields, PageletEditForm
+from zojax.resourcepackage.library import include
 
 from zojax.portlet.interfaces import IPortlet
 
@@ -65,3 +66,10 @@ class PortletManagerPublicAbsoluteURL(AbsoluteURL):
             removeAllProxies(self.context).__name__)
 
     __call__ = __str__
+    
+    
+class PortletPreview(object):
+    
+    def update(self):
+        super(PortletPreview, self).update()
+        include('zojax.portlet.preview')

@@ -111,6 +111,7 @@
      layout="page"
      for="..interfaces.IPortlet"
      template="portletpreviewitem.pt"
+     class=".portlet.PortletPreview"
      permission="zope.View" />
 
   <zojax:pagelet
@@ -122,5 +123,11 @@
   <zojax:resourceinclude
      name="zojax-portlet.css"
      library="zojax" type="stylesheet" file="styles.css" filetype="zrt" />
+     
+  <!-- styles -->
+  <zojax:resourceinclude
+     name="zojax.portlet.preview.js"
+     require="jquery"
+     library="zojax.portlet.preview" type="javascript" file="preview.js" />
 
 </configure>
