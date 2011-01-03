@@ -92,6 +92,28 @@
   <class class=".portlets.Portlets">
     <allow interface="zope.publisher.interfaces.IPublishTraverse" />
   </class>
+  
+  <adapter
+     for="..interfaces.IPortletManager zope.publisher.interfaces.http.IHTTPRequest"
+     name="portlet_absolute_url"
+     factory=".portlet.PortletManagerAbsoluteURL"
+     permission="zope.Public"
+     provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <class class=".portlet.PortletManagerAbsoluteURL">
+    <allow interface="zope.traversing.browser.interfaces.IAbsoluteURL"/>
+  </class>
+
+  <adapter
+     for="..interfaces.IPortlet zope.publisher.interfaces.http.IHTTPRequest"
+     name="portlet_absolute_url"
+     factory=".portlet.PortletAbsoluteURL"
+     permission="zope.Public"
+     provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <class class=".portlet.PortletAbsoluteURL">
+    <allow interface="zope.traversing.browser.interfaces.IAbsoluteURL"/>
+  </class>
 
   <!-- portlet -->
   <zojax:pagelet
@@ -122,12 +144,20 @@
   <!-- styles -->
   <zojax:resourceinclude
      name="zojax-portlet.css"
-     library="zojax" type="stylesheet" file="styles.css" filetype="zrt" />
+     library="zojax" type="stylesheet" file="resources/styles.css" filetype="zrt" />
      
   <!-- styles -->
   <zojax:resourceinclude
      name="zojax.portlet.preview.js"
      require="jquery"
-     library="zojax.portlet.preview" type="javascript" file="preview.js" />
+     library="zojax.portlet.preview" type="javascript" file="resources/preview.js" />
 
+  <!-- ecmascripts -->
+  <zojax:resourceinclude
+     name="resources/jquery.portlet.edit.js"
+     type="javascript"
+     library="zojax"
+     require="jquery"
+     file="resources/edit.js" />
+     
 </configure>

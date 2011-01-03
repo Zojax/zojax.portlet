@@ -3,7 +3,9 @@ Portlet
 =======
 
   >>> from zope import interface, component, schema
-  >>> from zojax.portlet import interfaces, portlet, manager
+  >>> from zojax.portlet import interfaces, portlet, manager, browser
+  >>> import zope.traversing
+  >>> from zope.app.folder.interfaces import IRootFolder
 
 Реализация
 
@@ -20,6 +22,13 @@ Portlet
   ...     MyPortletClass,
   ...     (None, None, None, None), interfaces.IPortlet, name='myportlet')
 
+  >>> component.provideAdapter(
+  ...     browser.portlet.PortletAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='portlet_absolute_url')
+
+  >>> component.provideAdapter(
+  ...     browser.portlet.PortletManagerAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='portlet_absolute_url')
+  
+
 Теперь нам нужен контент и view:
 
   >>> from zope.location import Location
@@ -27,7 +36,7 @@ Portlet
   >>> from zojax.extensions.interfaces import IExtensible
 
   >>> class Content(Location):
-  ...     interface.implements(IAttributeAnnotatable, IExtensible)
+  ...     interface.implements(IAttributeAnnotatable, IExtensible, IRootFolder)
   >>> content = Content()
 
   >>> from zope.publisher.browser import TestRequest
@@ -164,9 +173,9 @@ Custom portlet template
   ...     (content, request, None, None), interfaces.IPortlet, 'portlet3')
   >>> portlet.update()
   >>> print portlet.render()
-  <div>
-    Test
-  </div>
+  <div class="zojax-portlet" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portlet3"><div>
+      Test
+    </div></div>
 
   >>> context = xmlconfig.string('''
   ... <configure
@@ -205,9 +214,9 @@ Custom portlet renderer
   ...     (content, request, None, None), interfaces.IPortlet, 'portlet4')
   >>> portlet.update()
   >>> print portlet.render()
-  <div>
-    Test
-  </div>
+  <div class="zojax-portlet" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portlet4"><div>
+      Test
+    </div></div>
 
 Let's define new renderer
 
@@ -228,7 +237,7 @@ Let's define new renderer
   ...     MyRenderer, (IPortlet4, interface.Interface), interfaces.IPortletView)
 
   >>> print portlet.render()
-  Test portlet4
+  <div class="zojax-portlet" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portlet4">Test portlet4</div>
 
 This is equivalent of next pagelet definition
 

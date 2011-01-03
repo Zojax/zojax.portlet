@@ -123,5 +123,9 @@
     margin-bottom: 2em;
     height: 200px;
   }
-
+  
+  .zojax-portlet.selected {
+    border: 1px solid red;
+  }
+  
 }

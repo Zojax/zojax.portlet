@@ -68,6 +68,35 @@ class PortletManagerPublicAbsoluteURL(AbsoluteURL):
     __call__ = __str__
     
     
+def portletAbsoluteURL(ob, request):
+    return getMultiAdapter((ob, request), IAbsoluteURL, name="portlet_absolute_url")()
+
+
+class PortletAbsoluteURL(AbsoluteURL):
+
+    def __str__(self):
+        manager = self.context.manager
+        if manager is None:
+            return '%s/++extensions++/portlets/%s'%(getMultiAdapter(
+                (self.context, self.request),
+                name='absolute_url'), self.context.__name__)
+        return '%s/%s'%(getMultiAdapter(
+                (manager, self.request),
+                name='portlet_absolute_url'), self.context.__name__)
+
+    __call__ = __str__
+
+
+class PortletManagerAbsoluteURL(AbsoluteURL):
+
+    def __str__(self):
+        return '%s/context.html/presentation/pm-%s'%(
+            absoluteURL(self.context.context, self.request), \
+            removeAllProxies(self.context).__name__)
+
+    __call__ = __str__
+    
+    
 class PortletPreview(object):
     
     def update(self):

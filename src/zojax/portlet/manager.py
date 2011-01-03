@@ -37,6 +37,7 @@ from interfaces import IPortlet, IPortletsExtension
 from interfaces import IPortletManager, IPortletManagerView
 from interfaces import IPortletManagerConfiguration
 from configproperty import ConfigurationProperty
+from browser.portlet import portletAbsoluteURL
 
 
 class PortletManagerBase(Location):
@@ -91,17 +92,22 @@ class PortletManagerBase(Location):
 
     def updateConfigure(self):
         self.portlets = []
+        
+    @property
+    def url(self):
+        return portletAbsoluteURL(self, self.request)
 
     def render(self):
+        res = ''
         if not self.portlets or not self.isAvailable():
-            return u''
-
-        view = queryMultiAdapter((self, self.request), IPortletManagerView)
-        if view is not None:
-            return view.updateAndRender()
-
-        return u'\n'.join([portlet.updateAndRender()
-                           for portlet in self.portlets])
+            res = u''
+        else:
+            view = queryMultiAdapter((self, self.request), IPortletManagerView)
+            if view is not None:
+                res = view.updateAndRender()
+            res = u'\n'.join([portlet.updateAndRender()
+                               for portlet in self.portlets])
+        return u'<div class="zojax-portlet-manager" kssattr:url="%s">%s</div>'%(self.url, res)
 
     def isAvailable(self):
         return True

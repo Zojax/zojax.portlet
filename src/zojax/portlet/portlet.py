@@ -11,6 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from zojax.portlet.browser.portlet import portletAbsoluteURL
 """
 
 $Id$
@@ -62,17 +63,26 @@ class PortletBase(Location):
 
     def updateConfigure(self):
         pass
+    
+    @property
+    def url(self):
+        return portletAbsoluteURL(self, self.request)
 
     def render(self):
+        res = u''
         view = queryMultiAdapter((self, self.request), IPortletView)
         if view is not None:
             view.update()
-            return view.render()
-
-        if self.template is not None:
-            return self.template()
+            res = view.render()
         else:
-            return u''
+            if self.template is not None:
+                res = self.template()
+            else:
+                res = u''
+        if res:
+            return u'<div class="zojax-portlet" kssattr:url="%s">%s</div>'%(self.url, res)
+        else:
+            return res
 
     def isAllowed(self):
         return True
