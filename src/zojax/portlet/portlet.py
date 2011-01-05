@@ -79,7 +79,7 @@ class PortletBase(Location):
                 res = self.template()
             else:
                 res = u''
-        if res and len(self.__schema__):
+        if res and len(list(self.__schema__)):
             return u'<div class="zojax-portlet" kssattr:url="%s">%s</div>'%(self.__url, res)
         else:
             return res
