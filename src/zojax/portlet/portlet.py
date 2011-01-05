@@ -65,7 +65,7 @@ class PortletBase(Location):
         pass
     
     @property
-    def url(self):
+    def __url(self):
         return portletAbsoluteURL(self, self.request)
 
     def render(self):
@@ -80,7 +80,7 @@ class PortletBase(Location):
             else:
                 res = u''
         if res:
-            return u'<div class="zojax-portlet" kssattr:url="%s">%s</div>'%(self.url, res)
+            return u'<div class="zojax-portlet" kssattr:url="%s">%s</div>'%(self.__url, res)
         else:
             return res
 

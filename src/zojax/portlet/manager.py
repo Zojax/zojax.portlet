@@ -94,7 +94,7 @@ class PortletManagerBase(Location):
         self.portlets = []
         
     @property
-    def url(self):
+    def __url(self):
         return portletAbsoluteURL(self, self.request)
 
     def render(self):
@@ -107,7 +107,7 @@ class PortletManagerBase(Location):
                 res = view.updateAndRender()
             res = u'\n'.join([portlet.updateAndRender()
                                for portlet in self.portlets])
-        return u'<div class="zojax-portlet-manager" kssattr:url="%s">%s</div>'%(self.url, res)
+        return u'<div class="zojax-portlet-manager" kssattr:url="%s">%s</div>'%(self.__url, res)
 
     def isAvailable(self):
         return True
