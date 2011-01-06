@@ -54,8 +54,9 @@ $(document).ready(function() {
         if (!el.attr('processed')) {
             
             var handler = function(el) {
-                return function(data) {
-                    setPortletManagerEditLink(el);
+                return function(data, status, request) {
+                    if (request.status == 200)
+                        setPortletManagerEditLink(el);
                 };
             }     
             $.get(el.attr('kssattr:url'), handler(el))
