@@ -55,7 +55,7 @@ $(document).ready(function() {
             
             var handler = function(el) {
                 return function(data, status, request) {
-                    if (request.status == 200)
+                    if (request.status == 200 && !data.redirect)
                         setPortletManagerEditLink(el);
                 };
             }     
