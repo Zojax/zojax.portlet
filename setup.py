@@ -71,6 +71,7 @@ setup(name = 'zojax.portlet',
                           'zojax.extensions',
                           'zojax.resourcepackage',
                           'zojax.js.jquery',
+                          'zojax.jquery.timers'
                           ],
       extras_require = dict(test=['zope.app.testing',
                                   'zope.testing',

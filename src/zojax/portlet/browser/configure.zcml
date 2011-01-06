@@ -157,7 +157,7 @@
      name="resources/jquery.portlet.edit.js"
      type="javascript"
      library="zojax"
-     require="jquery"
+     require="jquery-plugins"
      file="resources/edit.js" />
      
 </configure>
