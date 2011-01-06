@@ -4,9 +4,11 @@ function setPortletEditLink(el)
             function () {
                 if (!$(this).hasClass('selected')) {
                     $(this).addClass('selected');
-                    $(this).append($('<a class="zojax-portlet-edit-link" href="'+el.attr('kssattr:url')+'">Edit portlet</a>'));
+                    $(this).append($('<a class="zojax-portlet-edit-link" href="'+el.attr('kssattr:url')+'">Edit portlet</a>'))
+                    $(this).find("a.zojax-portlet-edit-link").hide();
+                    $(this).find("a.zojax-portlet-edit-link").delay(350).fadeIn(200);
                 }
-              }, 
+              },
               function () {
                   if ($(this).hasClass('selected')) {
                       $(this).removeClass('selected');
@@ -33,8 +35,10 @@ function setPortletManagerEditLink(el)
                 if (!$(this).hasClass('selected')) {
                     $(this).addClass('selected');
                     $(this).append($('<a class="zojax-portlet-manager-edit-link" href="'+el.attr('kssattr:url')+'">Edit region</a>'));
+                    $(this).find("a.zojax-portlet-manager-edit-link").hide();
+                    $(this).find("a.zojax-portlet-manager-edit-link").delay(250).fadeIn(200);
                 }
-              }, 
+              },
               function () {
                   if ($(this).hasClass('selected')) {
                     $(this).removeClass('selected');
