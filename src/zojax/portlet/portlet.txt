@@ -173,9 +173,9 @@ Custom portlet template
   ...     (content, request, None, None), interfaces.IPortlet, 'portlet3')
   >>> portlet.update()
   >>> print portlet.render()
-  <div class="zojax-portlet" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portlet3"><div>
+  <div>
       Test
-    </div></div>
+    </div>
 
   >>> context = xmlconfig.string('''
   ... <configure
@@ -214,9 +214,9 @@ Custom portlet renderer
   ...     (content, request, None, None), interfaces.IPortlet, 'portlet4')
   >>> portlet.update()
   >>> print portlet.render()
-  <div class="zojax-portlet" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portlet4"><div>
+  <div>
       Test
-    </div></div>
+    </div>
 
 Let's define new renderer
 
@@ -237,7 +237,7 @@ Let's define new renderer
   ...     MyRenderer, (IPortlet4, interface.Interface), interfaces.IPortletView)
 
   >>> print portlet.render()
-  <div class="zojax-portlet" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portlet4">Test portlet4</div>
+  Test portlet4
 
 This is equivalent of next pagelet definition
 

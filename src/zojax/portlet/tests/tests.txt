@@ -52,10 +52,10 @@ Portlets Extension
         ...
         <table>
           <tr>
-           <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet1"><div class="portlet">Portlet1</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="portlet">Portlet1</div></div></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"></div></td>
+      <td></td>
           </tr>
         </table>
       </body>
@@ -72,10 +72,10 @@ Portlet
         ...
         <table>
           <tr>
-           <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet2"><div class="portlet">Portlet2, E-mail: test@localhost.com</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet2"><div class="portlet">Portlet2, E-mail: test@localhost.com</div></div></div></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"></div></td>
+      <td></td>
           </tr>
         </table>
       </body>
@@ -129,10 +129,10 @@ Preview contents
         ...
         <table>
           <tr>
-           <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet2"><div class="portlet">Portlet2, E-mail: test2@localhost.com</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet2"><div class="portlet">Portlet2, E-mail: test2@localhost.com</div></div></div></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"></div></td>
+      <td></td>
           </tr>
         </table>
       </body>
@@ -176,10 +176,10 @@ Edit wizard
         ...
         <table>
           <tr>
-           <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet1"><div class="portlet">Portlet1</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="portlet">Portlet1</div></div></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"></div></td>
+      <td></td>
           </tr>
         </table>
       </body>
@@ -200,10 +200,10 @@ We set portlet manager with status on root object
         ...
         <table>
           <tr>
-           <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet1"><div class="portlet">Portlet1</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="portlet">Portlet1</div></div></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.right/portlet1"><div class="portlet">Portlet1</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"><div class="portlet">Portlet1</div></div></td>
           </tr>
         </table>
       </body>
@@ -218,10 +218,10 @@ And we'll have same portlets on each contained objects:
         ...
         <table>
           <tr>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/context.html/presentation/pm-columns.left"></div></td>
+      <td></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.right/portlet1"><div class="portlet">Portlet1</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"><div class="portlet">Portlet1</div></div></td>
           </tr>
         </table>
       </body>
@@ -234,10 +234,10 @@ And we'll have same portlets on each contained objects:
         ...
         <table>
           <tr>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/content2/context.html/presentation/pm-columns.left"></div></td>
+      <td></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.right/portlet1"><div class="portlet">Portlet1</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"><div class="portlet">Portlet1</div></div></td>
           </tr>
         </table>
       </body>
@@ -255,7 +255,7 @@ But we can override for particular object
         ...
         <table>
           <tr>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/content2/context.html/presentation/pm-columns.left"></div></td>
+      <td></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
       <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/content2/context.html/presentation/pm-columns.right"><div class="zojax-portlet" kssattr:url="http://localhost/content/content2/context.html/presentation/pm-columns.right/portlet2"><div class="portlet">Portlet2, E-mail: test@localhost.com</div></div></div></td>
@@ -306,10 +306,10 @@ Also we can copy settings from parent manager, but we should have setting to uns
       ...
       <table>
         <tr>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/context.html/presentation/pm-columns.left"></div></td>
+      <td></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/context.html/presentation/pm-columns.right"><div class="zojax-portlet" kssattr:url="http://localhost/content/context.html/presentation/pm-columns.right/portlet1"><div class="portlet">Portlet1</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/context.html/presentation/pm-columns.right"><div class="portlet">Portlet1</div></div></td>
           </tr>
       </table>
     </body>

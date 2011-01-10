@@ -61,7 +61,7 @@ So initially nothing gets rendered:
 
   >>> leftColumn.update()
   >>> leftColumn.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-left"></div>'
+  u''
 
 
 Let's register some portlets
@@ -79,7 +79,7 @@ Let's register some portlets
 
   >>> leftColumn.update()
   >>> leftColumn.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-left"></div>'
+  u''
 
 We need assign portlets to manager
 
@@ -319,19 +319,19 @@ But portlets is not available because manager status is unset
   ...     (content, request, view), interfaces.IPortletManager, 'portletManager6')
   >>> pm.update()
   >>> pm.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6"></div>'
+  u''
 
   >>> pm1 = component.getMultiAdapter(
   ...     (content1, request, view), interfaces.IPortletManager, 'portletManager6')
   >>> pm1.update()
   >>> pm1.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6"></div>'
+  u''
 
   >>> pm2 = component.getMultiAdapter(
   ...     (content2, request, view), interfaces.IPortletManager, 'portletManager6')
   >>> pm2.update()
   >>> pm2.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6"></div>'
+  u''
 
   >>> pm.status = interfaces.ENABLED
   >>> pm.portletIds = ('weather',)
@@ -363,13 +363,13 @@ But portlets is not available because manager status is unset
   ...     (content1, request, view), interfaces.IPortletManager, 'portletManager6')
   >>> pm1.update()
   >>> pm1.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6"></div>'
+  u''
 
   >>> pm2 = component.getMultiAdapter(
   ...     (content2, request, view), interfaces.IPortletManager, 'portletManager6')
   >>> pm2.update()
   >>> pm2.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6"></div>'
+  u''
 
 
 just test
@@ -379,7 +379,7 @@ just test
   >>> pm2.portletIds = ('weather',)
   >>> pm2.update()
   >>> pm2.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6"></div>'
+  u''
 
 
 Portlet type

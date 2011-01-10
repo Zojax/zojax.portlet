@@ -100,7 +100,7 @@ class PortletManagerBase(Location):
     def render(self):
         res = ''
         if not self.portlets or not self.isAvailable():
-            res = u''
+            return u''
         else:
             view = queryMultiAdapter((self, self.request), IPortletManagerView)
             if view is not None:
