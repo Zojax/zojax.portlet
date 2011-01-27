@@ -102,3 +102,9 @@ class PortletPreview(object):
     def update(self):
         super(PortletPreview, self).update()
         include('zojax.portlet.preview')
+    
+        
+class PortletCheck(object):
+    
+    def __call__(self):
+        return u'Ok'

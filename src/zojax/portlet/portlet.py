@@ -11,7 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-from zojax.portlet.browser.portlet import portletAbsoluteURL
+from zojax.portlet.browser.portlet import portletAbsoluteURL, publicAbsoluteURL
 """
 
 $Id$
@@ -67,6 +67,10 @@ class PortletBase(Location):
     @property
     def __url(self):
         return portletAbsoluteURL(self, self.request)
+    
+    @property
+    def __checkUrl(self):
+        return '%s/check'%publicAbsoluteURL(self, self.request)
 
     def render(self):
         res = u''
@@ -80,7 +84,7 @@ class PortletBase(Location):
             else:
                 res = u''
         if res and self.__schema__ is not None:
-            return u'<div class="zojax-portlet" kssattr:url="%s">%s</div>'%(self.__url, res)
+            return u'<div class="zojax-portlet" kssattr:url="%s" kssattr:checkurl="%s">%s</div>'%(self.__url, self.__checkUrl, res)
         else:
             return res
 

@@ -31,6 +31,12 @@ Portlets manager практически тозже самое что и ViewletM
   >>> component.provideAdapter(
   ...     browser.portlet.PortletManagerAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='portlet_absolute_url')
   
+  >>> component.provideAdapter(
+  ...     browser.portlet.PortletAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='public_absolute_url')
+
+  >>> component.provideAdapter(
+  ...     browser.portlet.PortletManagerPublicAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='public_absolute_url')
+  
 
 Now we have to instantiate it:
 
@@ -86,7 +92,7 @@ We need assign portlets to manager
   >>> leftColumn.portletIds = ('weather',)
   >>> leftColumn.update()
   >>> leftColumn.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-left"><div class="box">It is sunny today!</div></div>'
+  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-left" kssattr:checkurl="http://127.0.0.1/portlets/left/check"><div class="box">It is sunny today!</div></div>'
 
 
 `zojax:portletManager` directive
@@ -120,7 +126,7 @@ Very simple portletManager
   >>> pm.__parent__
   <zojax.portlet.TESTS.Content ...>
   >>> pm.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager1"><div class="box">It is sunny today!</div></div>'
+  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager1" kssattr:checkurl="http://127.0.0.1/portlets/portletManager1/check"><div class="box">It is sunny today!</div></div>'
 
 
 Portlet with custom implementation
@@ -222,7 +228,7 @@ Custom portlet manager view
   >>> pm.portletIds = ('weather',)
   >>> pm.update()
   >>> print pm.render()
-  <div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager4"><div class="box">It is sunny today!</div></div>
+  <div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager4" kssattr:checkurl="http://127.0.0.1/portlets/portletManager4/check"><div class="box">It is sunny today!</div></div>
 
   >>> os.unlink(filename)
 
@@ -340,19 +346,19 @@ But portlets is not available because manager status is unset
   ...     (content, request, view), interfaces.IPortletManager, 'portletManager6')
   >>> pm.update()
   >>> pm.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6"><div class="box">It is sunny today!</div></div>'
+  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6" kssattr:checkurl="http://127.0.0.1/portlets/portletManager6/check"><div class="box">It is sunny today!</div></div>'
 
   >>> pm1 = component.getMultiAdapter(
   ...     (content1, request, view), interfaces.IPortletManager, 'portletManager6')
   >>> pm1.update()
   >>> pm1.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6"><div class="box">It is sunny today!</div></div>'
+  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6" kssattr:checkurl="http://127.0.0.1/portlets/portletManager6/check"><div class="box">It is sunny today!</div></div>'
 
   >>> pm2 = component.getMultiAdapter(
   ...     (content2, request, view), interfaces.IPortletManager, 'portletManager6')
   >>> pm2.update()
   >>> pm2.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6"><div class="box">It is sunny today!</div></div>'
+  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager6" kssattr:checkurl="http://127.0.0.1/portlets/portletManager6/check"><div class="box">It is sunny today!</div></div>'
 
   >>> pm2.status is interfaces.UNSET
   True
@@ -416,5 +422,5 @@ let's register portlet with new portlet type
   >>> pm.portletIds = ('weather2',)
   >>> pm.update()
   >>> pm.render()
-  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager7"><div class="box">It is sunny today!</div></div>'
+  u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager7" kssattr:checkurl="http://127.0.0.1/portlets/portletManager7/check"><div class="box">It is sunny today!</div></div>'
 

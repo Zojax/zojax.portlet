@@ -33,11 +33,12 @@ class Portlets(object):
     interface.implements(IPublishTraverse)
 
     __name__ = 'portlets'
+    __parent__ = None
 
     def __init__(self, context, request):
-        self.context = context
+        self.__parent__ = self.context = context
         self.request = request
-
+        
     def publishTraverse(self, request, name):
         context = self.context
 

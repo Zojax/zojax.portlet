@@ -1,6 +1,7 @@
 <configure
    xmlns="http://namespaces.zope.org/zope"
    xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
    i18n_domain="zojax.portlet">
 
   <include file="editwizard.zcml" />
@@ -134,7 +135,19 @@
      for="..interfaces.IPortlet"
      template="portletpreviewitem.pt"
      class=".portlet.PortletPreview"
-     permission="zope.View" />
+     permission="zojax.ManagePortlets" />
+     
+  <browser:page
+     name="check"
+     for="..interfaces.IPortlet"
+     class=".portlet.PortletCheck"
+     permission="zojax.ManagePortlets" />
+     
+  <browser:page
+     name="check"
+     for="..interfaces.IPortletManager"
+     class=".portlet.PortletCheck"
+     permission="zojax.ManagePortlets" />
 
   <zojax:pagelet
      for=".portlet.PortletConfiguration"

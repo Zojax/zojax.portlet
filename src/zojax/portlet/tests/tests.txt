@@ -52,7 +52,7 @@ Portlets Extension
         ...
         <table>
           <tr>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="portlet">Portlet1</div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left" kssattr:checkurl="http://localhost/portlets/columns.left/check"><div class="portlet">Portlet1</div></div></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
       <td></td>
@@ -72,7 +72,7 @@ Portlet
         ...
         <table>
           <tr>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet2"><div class="portlet">Portlet2, E-mail: test@localhost.com</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left" kssattr:checkurl="http://localhost/portlets/columns.left/check"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet2" kssattr:checkurl="http://localhost/portlets/columns.left/portlet2/check"><div class="portlet">Portlet2, E-mail: test@localhost.com</div></div></div></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
       <td></td>
@@ -114,7 +114,7 @@ Preview contents
 
     >>> actor.open('http://localhost/portlets/columns.left/portlet2/preview')
     >>> print actor.contents
-    <div class="z-portlet-preview-content-wrapper"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet2"><div class="portlet">Portlet2, E-mail: test2@localhost.com</div></div></div>
+    <div class="z-portlet-preview-content-wrapper"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet2" kssattr:checkurl="http://localhost/portlets/columns.left/portlet2/check"><div class="portlet">Portlet2, E-mail: test2@localhost.com</div></div></div>
 
     >>> actor.open("http://localhost/++extensions++/portlets/columns.left/")
     >>> actor.getLink('Portlet2').click()
@@ -129,7 +129,7 @@ Preview contents
         ...
         <table>
           <tr>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet2"><div class="portlet">Portlet2, E-mail: test2@localhost.com</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left" kssattr:checkurl="http://localhost/portlets/columns.left/check"><div class="zojax-portlet" kssattr:url="http://localhost/context.html/presentation/pm-columns.left/portlet2" kssattr:checkurl="http://localhost/portlets/columns.left/portlet2/check"><div class="portlet">Portlet2, E-mail: test2@localhost.com</div></div></div></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
       <td></td>
@@ -176,7 +176,7 @@ Edit wizard
         ...
         <table>
           <tr>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="portlet">Portlet1</div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left" kssattr:checkurl="http://localhost/portlets/columns.left/check"><div class="portlet">Portlet1</div></div></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
       <td></td>
@@ -200,10 +200,10 @@ We set portlet manager with status on root object
         ...
         <table>
           <tr>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left"><div class="portlet">Portlet1</div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.left" kssattr:checkurl="http://localhost/portlets/columns.left/check"><div class="portlet">Portlet1</div></div></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"><div class="portlet">Portlet1</div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right" kssattr:checkurl="http://localhost/portlets/columns.right/check"><div class="portlet">Portlet1</div></div></td>
           </tr>
         </table>
       </body>
@@ -221,7 +221,7 @@ And we'll have same portlets on each contained objects:
       <td></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"><div class="portlet">Portlet1</div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right" kssattr:checkurl="http://localhost/portlets/columns.right/check"><div class="portlet">Portlet1</div></div></td>
           </tr>
         </table>
       </body>
@@ -237,7 +237,7 @@ And we'll have same portlets on each contained objects:
       <td></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right"><div class="portlet">Portlet1</div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/context.html/presentation/pm-columns.right" kssattr:checkurl="http://localhost/portlets/columns.right/check"><div class="portlet">Portlet1</div></div></td>
           </tr>
         </table>
       </body>
@@ -250,19 +250,19 @@ But we can override for particular object
 
    >>> actor.open("http://localhost/content/content2/test.html")
    >>> print actor.contents
-   <html>
+    <html>
       <body>
-        ...
+        <div><!--zojax-statusmessage--></div>
         <table>
           <tr>
       <td></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/content2/context.html/presentation/pm-columns.right"><div class="zojax-portlet" kssattr:url="http://localhost/content/content2/context.html/presentation/pm-columns.right/portlet2"><div class="portlet">Portlet2, E-mail: test@localhost.com</div></div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/content2/context.html/presentation/pm-columns.right" kssattr:checkurl="http://localhost/content/content2/portlets/columns.right/check"><div class="zojax-portlet" kssattr:url="http://localhost/content/content2/context.html/presentation/pm-columns.right/portlet2" kssattr:checkurl="http://localhost/content/content2/portlets/columns.right/portlet2/check"><div class="portlet">Portlet2, E-mail: test@localhost.com</div></div></div></td>
           </tr>
         </table>
       </body>
-   </html>
+    </html>
 
 
 Access to portlet managers from presentation step
@@ -301,19 +301,20 @@ Also we can copy settings from parent manager, but we should have setting to uns
 
   >>> actor.open("http://localhost/content/test.html")
   >>> print actor.contents
-  <html>
-    <body>
-      ...
-      <table>
-        <tr>
+    <html>
+      <body>
+        <div><!--zojax-statusmessage--></div>
+        <table>
+          <tr>
       <td></td>
       <td><div id="z-portal-workspace"><div id="z-portal-viewspace"><div id="z-content"><div>zope.mgr</div>
     <div>Manager</div></div></div></div></td>
-      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/context.html/presentation/pm-columns.right"><div class="portlet">Portlet1</div></div></td>
+      <td><div class="zojax-portlet-manager" kssattr:url="http://localhost/content/context.html/presentation/pm-columns.right" kssattr:checkurl="http://localhost/content/portlets/columns.right/check"><div class="portlet">Portlet1</div></div></td>
           </tr>
-      </table>
-    </body>
-  </html>
+        </table>
+      </body>
+    </html>
+
 
 Portlets and managers can be accessed through publisher:
 

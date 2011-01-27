@@ -11,6 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from zojax.portlet.browser.portlet import publicAbsoluteURL
 """
 
 $Id$
@@ -96,6 +97,10 @@ class PortletManagerBase(Location):
     @property
     def __url(self):
         return portletAbsoluteURL(self, self.request)
+    
+    @property
+    def __checkUrl(self):
+        return '%s/check'%publicAbsoluteURL(self, self.request)
 
     def render(self):
         res = ''
@@ -107,7 +112,7 @@ class PortletManagerBase(Location):
                 res = view.updateAndRender()
             res = u'\n'.join([portlet.updateAndRender()
                                for portlet in self.portlets])
-        return u'<div class="zojax-portlet-manager" kssattr:url="%s">%s</div>'%(self.__url, res)
+        return u'<div class="zojax-portlet-manager" kssattr:url="%s" kssattr:checkurl="%s">%s</div>'%(self.__url, self.__checkUrl, res)
 
     def isAvailable(self):
         return True

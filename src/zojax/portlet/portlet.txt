@@ -27,6 +27,12 @@ Portlet
 
   >>> component.provideAdapter(
   ...     browser.portlet.PortletManagerAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='portlet_absolute_url')
+
+  >>> component.provideAdapter(
+  ...     browser.portlet.PortletPublicAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='public_absolute_url')
+
+  >>> component.provideAdapter(
+  ...     browser.portlet.PortletManagerPublicAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='public_absolute_url')
   
 
 Теперь нам нужен контент и view:

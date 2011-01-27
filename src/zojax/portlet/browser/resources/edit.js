@@ -68,7 +68,7 @@ $(document).ready(function() {
                     setPortletManagerEditLink(el);
                 };
             }     
-            $.get(el.attr('kssattr:url'), handler(el))
+            $.get(el.attr('kssattr:checkurl'), handler(el))
         }
     }
 });
