@@ -154,3 +154,7 @@ class IPortletManagerView(interface.Interface):
 
 class IPortletConfigurationView(interface.Interface):
     """ portlet configuration view """
+
+
+class IPortletEditLinksLayer(interface.Interface):
+    """ portlet edit links layer """

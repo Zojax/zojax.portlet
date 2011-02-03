@@ -171,6 +171,7 @@
      type="javascript"
      library="zojax"
      require="jquery-plugins"
-     file="resources/edit.js" />
+     file="resources/edit.js"
+     layer="..interfaces.IPortletEditLinksLayer" />
      
 </configure>

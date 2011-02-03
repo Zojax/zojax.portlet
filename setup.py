@@ -70,6 +70,7 @@ setup(name = 'zojax.portlet',
                           'zojax.layoutform',
                           'zojax.extensions',
                           'zojax.resourcepackage',
+                          'zojax.skintool',
                           'zojax.js.jquery',
                           'zojax.jquery.timers'
                           ],

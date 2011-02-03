@@ -51,6 +51,14 @@
        permission="zope.Public"
        interface=".interfaces.IPortletsExtension" />
   </zojax:extension>
+  
+  <!-- skin layer -->
+  <zojax:layer
+     name="portlet-edit-links"
+     layer=".interfaces.IPortletEditLinksLayer"
+     title="Portlet Edit Links"
+     description="Enable portlet edit links appear for principals who have needed permissions" />
+  
 
   <!-- cache -->
   <include file="cache.zcml" />
