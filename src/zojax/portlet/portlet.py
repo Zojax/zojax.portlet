@@ -127,7 +127,8 @@ def Portlet(name, class_=None, title='', description='',
 
     if schema is not None:
         for f_id in getFields(schema):
-            setattr(PortletClass, f_id, ConfigurationProperty(schema[f_id]))
+            if not hasattr(PortletClass, f_id):
+                setattr(PortletClass, f_id, ConfigurationProperty(schema[f_id]))
 
         PortletClass.__schema__ = schema
         interface.classImplements(PortletClass, schema)
