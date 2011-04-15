@@ -51,9 +51,12 @@ def publicAbsoluteURL(ob, request):
 class PortletPublicAbsoluteURL(AbsoluteURL):
 
     def __str__(self):
-        return '%s/%s'%(getMultiAdapter(
-                (self.context.manager, self.request),
-                name='public_absolute_url'), self.context.__name__)
+        manager = self.context.manager
+        if manager is not None:
+            return '%s/%s'%(getMultiAdapter(
+                    (manager, self.request),
+                    name='public_absolute_url'), self.context.__name__)
+        return '#'
 
     __call__ = __str__
 
