@@ -48,5 +48,8 @@ class Portlets(object):
             manager.update()
             interface.alsoProvides(manager, IPortletManagerPublicMarker)
             return LocationProxy(manager, self.context, name)
-
+    
         raise NotFound(self.context, self.__name__, request)
+
+    def __call__(self):
+	raise NotFound(self.context, self.__name__, request)
