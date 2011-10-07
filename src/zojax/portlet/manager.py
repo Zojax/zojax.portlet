@@ -118,11 +118,10 @@ class PortletManagerBase(Location):
                 res = u'\n'.join([portlet.updateAndRender()
                                    for portlet in self.portlets])
             return u'<div class="zojax-portlet-manager" kssattr:url="%s" kssattr:checkurl="%s">%s</div>'%(self.__url, self.__checkUrl, res)
-        except ConflictError:
-            raise
         except Exception, e:
             logger.exception('Portlets Rendering Error: ')
-            return u'<div class="zojax-portlet-manager">Portlets Rendering Error</div>'
+            return u'<div class="zojax-portlet-manager" kssattr:url="%s" kssattr:checkurl="%s">Portlets Rendering Error</div>' % \
+                (self.__url, self.__checkUrl)
 
     def isAvailable(self):
         return True

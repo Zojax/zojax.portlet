@@ -96,7 +96,8 @@ class PortletBase(Location):
             raise
         except Exception, e:
             logger.exception('Portlet "%s" Render Error: ' % (self.title, ))
-            return u'<div class="zojax-portlet">Portlet "%s" Render Error</div>' % (self.title, )
+            return u'<div class="zojax-portlet" kssattr:url="%s" kssattr:checkurl="%s">Portlet "%s" Render Error</div>' % \
+                (self.__url, self.__checkUrl, self.title)
 
     def isAllowed(self):
         return True
