@@ -30,13 +30,13 @@ Portlets manager практически тозже самое что и ViewletM
 
   >>> component.provideAdapter(
   ...     browser.portlet.PortletManagerAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='portlet_absolute_url')
-  
+
   >>> component.provideAdapter(
   ...     browser.portlet.PortletAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='public_absolute_url')
 
   >>> component.provideAdapter(
   ...     browser.portlet.PortletManagerPublicAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='public_absolute_url')
-  
+
 
 Now we have to instantiate it:
 
@@ -73,7 +73,7 @@ So initially nothing gets rendered:
 Let's register some portlets
 
   >>> from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-  
+
   >>> class WeatherBox(portlet.PortletBase):
   ...     interface.implements(interfaces.IPortlet)
   ...
@@ -107,12 +107,12 @@ Very simple portletManager
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portletManager
   ...     name="portletManager1"
   ...     title="Portlet Manager 1"
   ...     description="Test portlet manager 1" />
-  ... 
+  ...
   ... </configure>''', context)
 
   >>> pm = component.getMultiAdapter(
@@ -137,12 +137,12 @@ Portlet with custom implementation
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portletManager
   ...     name="portletManager2"
   ...     title="Portlet Manager 2"
   ...     class="zojax.portlet.TESTS.MyPortletManager" />
-  ... 
+  ...
   ... </configure>''', context)
 
   >>> pm = component.getMultiAdapter(
@@ -162,13 +162,13 @@ Provides/Layer
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portletManager
   ...     name="portletManager3"
   ...     title="Portlet Manager 3"
   ...     provides="zojax.portlet.TESTS.IMyManager"
   ...     layer="zojax.portlet.TESTS.IMyLayer" />
-  ... 
+  ...
   ... </configure>''', context)
 
   >>> pm = component.getMultiAdapter(
@@ -204,23 +204,23 @@ Custom portlet manager view
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <include package="zojax.layout" file="meta.zcml" />
-  ... 
+  ...
   ...   <zojax:pageletType
   ...      name="portlet.manager.view"
   ...      interface=".interfaces.IPortletManagerView" />
-  ... 
+  ...
   ...   <zojax:portletManager
   ...     name="portletManager4"
   ...     provides="zojax.portlet.TESTS.IMyManager"
   ...     title="Portlet Manager 4" />
-  ... 
+  ...
   ...   <zojax:pagelet
   ...     type="portlet.manager.view"
   ...     for="zojax.portlet.TESTS.IMyManager"
   ...     template="%s" />
-  ... 
+  ...
   ... </configure>'''%filename, context)
 
   >>> pm = component.getMultiAdapter(
@@ -235,12 +235,12 @@ Custom portlet manager view
   >>> xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portletManager
   ...     name="portletManager3"
   ...     title="Portlet Manager 3"
   ...     template="unknown.pt" />
-  ... 
+  ...
   ... </configure>''', context)
   Traceback (most recent call last):
   ...
@@ -251,7 +251,7 @@ Manager configuration schema
 ----------------------------
 
   >>> class IPortletManager5(interface.Interface):
-  ...     
+  ...
   ...     email = schema.TextLine(
   ...         title = u'E-mail',
   ...         default = u'test@localhost.com',
@@ -260,12 +260,12 @@ Manager configuration schema
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portletManager
   ...     name="portletManager5"
   ...     title="Portlet Manager 5"
   ...     schema="zojax.portlet.TESTS.IPortletManager5" />
-  ... 
+  ...
   ... </configure>''', context)
 
   >>> pm = component.getMultiAdapter(
@@ -298,13 +298,13 @@ Portlets manager with status
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portletManager
   ...     name="portletManager6"
   ...     title="Portlet Manager 6"
   ...     class="zojax.portlet.manager.PortletManagerWithStatus"
   ...     schema="zojax.portlet.interfaces.IPortletManagerWithStatus" />
-  ... 
+  ...
   ... </configure>''', context)
 
   >>> content1 = Content()
@@ -399,12 +399,12 @@ We can use different portlet types for filtering allowed portlets
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portletManager
   ...     name="portletManager7"
   ...     title="Portlet Manager 7"
   ...     portlettype="zojax.portlet.TESTS.IMyPortlets" />
-  ... 
+  ...
   ... </configure>''', context)
 
   >>> pm = component.getMultiAdapter(
@@ -424,3 +424,23 @@ let's register portlet with new portlet type
   >>> pm.render()
   u'<div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portletManager7" kssattr:checkurl="http://127.0.0.1/portlets/portletManager7/check"><div class="box">It is sunny today!</div></div>'
 
+
+Portlets render exception
+-------------------------
+
+  >>> class SecondWeatherBox(portlet.PortletBase):
+  ...     interface.implements(interfaces.IPortlet)
+  ...
+  ...     def update(self):
+  ...         return results.titles # here is exception
+  ...
+  ...     def render(self):
+  ...         return u'<div class="box">Tomorrow will be cloudy.</div>'
+
+  >>> component.provideAdapter(
+  ...     SecondWeatherBox, (None,None,None,None), interfaces.IPortlet, name='weather2')
+
+  >>> leftColumn.portletIds = ('weather2',)
+  >>> leftColumn.update()
+  >>> print leftColumn.render()
+  <div class="zojax-portlet-manager">Portlets Rendering Error</div>

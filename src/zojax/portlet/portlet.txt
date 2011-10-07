@@ -10,7 +10,7 @@ Portlet
 Реализация
 
   >>> class MyPortlet(object):
-  ...     
+  ...
   ...     def render(self):
   ...         return u'<div class="box">It is sunny today!</div>'
 
@@ -33,7 +33,7 @@ Portlet
 
   >>> component.provideAdapter(
   ...     browser.portlet.PortletManagerPublicAbsoluteURL, (None, None), zope.traversing.browser.interfaces.IAbsoluteURL, name='public_absolute_url')
-  
+
 
 Теперь нам нужен контент и view:
 
@@ -81,12 +81,12 @@ Very simple portlet
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portlet
   ...     name="portlet1"
   ...     title="Portlet 1"
   ...     description="Test portlet 1" />
-  ... 
+  ...
   ... </configure>''', context)
 
   >>> portlet = component.getMultiAdapter(
@@ -104,7 +104,7 @@ Portlet configuration schema
 ----------------------------
 
   >>> class IPortlet5(interface.Interface):
-  ...     
+  ...
   ...     email = schema.TextLine(
   ...         title = u'E-mail',
   ...         default = u'test@localhost.com',
@@ -113,12 +113,12 @@ Portlet configuration schema
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portlet
   ...     name="portlet5"
   ...     title="Portlet 5"
   ...     schema="zojax.portlet.TESTS.IPortlet5" />
-  ... 
+  ...
   ... </configure>''', context)
 
   >>> portlet = component.getMultiAdapter(
@@ -138,12 +138,12 @@ Portlet with custom implementation
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portlet
   ...     name="portlet2"
   ...     title="Portlet 2"
   ...     class="zojax.portlet.TESTS.MyPortlet" />
-  ... 
+  ...
   ... </configure>''', context)
 
   >>> portlet = component.getMultiAdapter(
@@ -167,12 +167,12 @@ Custom portlet template
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portlet
   ...     name="portlet3"
   ...     title="Portlet 3"
   ...     template="%s" />
-  ... 
+  ...
   ... </configure>'''%filename, context)
 
   >>> portlet = component.getMultiAdapter(
@@ -186,16 +186,17 @@ Custom portlet template
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portlet
   ...     name="portlet3"
   ...     title="Portlet 3"
   ...     template="unknown.pt" />
-  ... 
+  ...
   ... </configure>''', context)
   Traceback (most recent call last):
   ...
   ZopeXMLConfigurationError: ...
+
 
 
 Custom portlet renderer
@@ -207,13 +208,13 @@ Custom portlet renderer
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portlet
   ...     name="portlet4"
   ...     title="Portlet 4"
   ...     provides="zojax.portlet.TESTS.IPortlet4"
   ...     template="%s" />
-  ... 
+  ...
   ... </configure>'''%filename, context)
 
   >>> portlet = component.getMultiAdapter(
@@ -228,14 +229,14 @@ Let's define new renderer
 
   >>> class MyRenderer(object):
   ...     interface.implements(interfaces.IPortletView)
-  ...     
+  ...
   ...     def __init__(self, context, request):
   ...         self.context = context
   ...         self.request = request
-  ...     
+  ...
   ...     def update(self):
   ...         pass
-  ...     
+  ...
   ...     def render(self):
   ...         return u'Test portlet4'
 
@@ -258,7 +259,7 @@ Portlet configuration schema
 ----------------------------
 
   >>> class IPortletConfig(interface.Interface):
-  ...     
+  ...
   ...     email = schema.TextLine(
   ...         title = u'E-mail',
   ...         default = u'test@localhost.com',
@@ -267,17 +268,17 @@ Portlet configuration schema
   >>> context = xmlconfig.string('''
   ... <configure
   ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
-  ... 
+  ...
   ...   <zojax:portlet
   ...     name="portlet5"
   ...     title="Portlet 5"
   ...     schema="zojax.portlet.TESTS.IPortletConfig"
   ...     template="%s" />
-  ... 
+  ...
   ...   <zojax:portletManager
   ...     name="portletManager"
   ...     title="Portlet Manager" />
-  ... 
+  ...
   ... </configure>'''%filename, context)
 
   >>> pm = component.getMultiAdapter(
@@ -296,6 +297,32 @@ schema data is persistent
   ...     (content, request, pm, None), interfaces.IPortlet, 'portlet5')
   >>> portlet.email
   u'test2@localhost.com'
+
+
+Portlet render exception
+------------------------
+
+  >>> open(filename, 'wb').write('''
+  ... <div tal:content="context/title">
+  ...   Test
+  ... </div>''') # here is exception
+
+  >>> context = xmlconfig.string('''
+  ... <configure
+  ...    xmlns:zojax="http://namespaces.zope.org/zojax" i18n_domain="test">
+  ...
+  ...   <zojax:portlet
+  ...     name="portlet6"
+  ...     title="Portlet 6"
+  ...     template="%s" />
+  ...
+  ... </configure>'''%filename, context)
+
+  >>> portlet = component.getMultiAdapter(
+  ...     (content, request, None, None), interfaces.IPortlet, 'portlet6')
+  >>> portlet.update()
+  >>> print portlet.render()
+  <div class="zojax-portlet">Portlet "Portlet 6" Render Error</div>
 
 
 clean up

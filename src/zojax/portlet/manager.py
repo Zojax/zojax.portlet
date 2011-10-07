@@ -17,12 +17,14 @@ from zojax.portlet.browser.portlet import publicAbsoluteURL
 $Id$
 """
 import sys
+import logging
 from datetime import datetime
 from pickle import Pickler
 from pickle import Unpickler
 from StringIO import StringIO
 from BTrees.OOBTree import OOBTree
 from rwproperty import setproperty, getproperty
+from ZODB.POSException import ConflictError
 
 from zope import interface
 from zope.schema import getFields
@@ -39,6 +41,8 @@ from interfaces import IPortletManager, IPortletManagerView
 from interfaces import IPortletManagerConfiguration
 from configproperty import ConfigurationProperty
 from browser.portlet import portletAbsoluteURL
+
+logger = logging.getLogger('zojax.portlet')
 
 
 class PortletManagerBase(Location):
@@ -93,26 +97,32 @@ class PortletManagerBase(Location):
 
     def updateConfigure(self):
         self.portlets = []
-        
+
     @property
     def __url(self):
         return portletAbsoluteURL(self, self.request)
-    
+
     @property
     def __checkUrl(self):
         return '%s/check'%publicAbsoluteURL(self, self.request)
 
     def render(self):
-        res = ''
-        if not self.portlets or not self.isAvailable():
-            return u''
-        else:
-            view = queryMultiAdapter((self, self.request), IPortletManagerView)
-            if view is not None:
-                res = view.updateAndRender()
-            res = u'\n'.join([portlet.updateAndRender()
-                               for portlet in self.portlets])
-        return u'<div class="zojax-portlet-manager" kssattr:url="%s" kssattr:checkurl="%s">%s</div>'%(self.__url, self.__checkUrl, res)
+        try:
+            res = ''
+            if not self.portlets or not self.isAvailable():
+                return u''
+            else:
+                view = queryMultiAdapter((self, self.request), IPortletManagerView)
+                if view is not None:
+                    res = view.updateAndRender()
+                res = u'\n'.join([portlet.updateAndRender()
+                                   for portlet in self.portlets])
+            return u'<div class="zojax-portlet-manager" kssattr:url="%s" kssattr:checkurl="%s">%s</div>'%(self.__url, self.__checkUrl, res)
+        except ConflictError:
+            raise
+        except Exception, e:
+            logger.exception('Portlets Rendering Error: ')
+            return u'<div class="zojax-portlet-manager">Portlets Rendering Error</div>'
 
     def isAvailable(self):
         return True
@@ -129,7 +139,7 @@ class PortletManagerBase(Location):
             data[name] = pdata
 
         return pdata
-    
+
     def updateAndRender(self):
         self.update()
         if self.isAvailable():

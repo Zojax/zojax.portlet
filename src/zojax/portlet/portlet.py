@@ -16,15 +16,19 @@ from zojax.portlet.browser.portlet import portletAbsoluteURL, publicAbsoluteURL
 
 $Id$
 """
+import logging
 from zope import interface
 from zope.schema import getFields
 from zope.location import Location
 from zope.security.proxy import removeSecurityProxy
 from zope.component import getUtility, queryUtility, queryMultiAdapter
 from z3c.pt.pagetemplate import ViewPageTemplateFile
+from ZODB.POSException import ConflictError
 
 from configproperty import ConfigurationProperty
 from interfaces import IPortlet, IPortletView, IPortletManager
+
+logger = logging.getLogger('zojax.portlet')
 
 
 class PortletBase(Location):
@@ -63,30 +67,36 @@ class PortletBase(Location):
 
     def updateConfigure(self):
         pass
-    
+
     @property
     def __url(self):
         return portletAbsoluteURL(self, self.request)
-    
+
     @property
     def __checkUrl(self):
         return '%s/check'%publicAbsoluteURL(self, self.request)
 
     def render(self):
-        res = u''
-        view = queryMultiAdapter((self, self.request), IPortletView)
-        if view is not None:
-            view.update()
-            res = view.render()
-        else:
-            if self.template is not None:
-                res = self.template()
+        try:
+            res = u''
+            view = queryMultiAdapter((self, self.request), IPortletView)
+            if view is not None:
+                view.update()
+                res = view.render()
             else:
-                res = u''
-        if res and self.__schema__ is not None:
-            return u'<div class="zojax-portlet" kssattr:url="%s" kssattr:checkurl="%s">%s</div>'%(self.__url, self.__checkUrl, res)
-        else:
-            return res
+                if self.template is not None:
+                    res = self.template()
+                else:
+                    res = u''
+            if res and self.__schema__ is not None:
+                return u'<div class="zojax-portlet" kssattr:url="%s" kssattr:checkurl="%s">%s</div>'%(self.__url, self.__checkUrl, res)
+            else:
+                return res
+        except ConflictError:
+            raise
+        except Exception, e:
+            logger.exception('Portlet "%s" Render Error: ' % (self.title, ))
+            return u'<div class="zojax-portlet">Portlet "%s" Render Error</div>' % (self.title, )
 
     def isAllowed(self):
         return True
