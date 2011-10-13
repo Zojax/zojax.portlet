@@ -322,7 +322,7 @@ Portlet render exception
   ...     (content, request, None, None), interfaces.IPortlet, 'portlet6')
   >>> portlet.update()
   >>> print portlet.render()
-  <div class="zojax-portlet">Portlet "Portlet 6" Render Error</div>
+  <div class="zojax-portlet" kssattr:url="http://127.0.0.1/context.html/presentation/pm-portlet6" kssattr:checkurl="http://127.0.0.1/portlets/portlet6/check">Portlet "Portlet 6" Render Error</div>
 
 
 clean up

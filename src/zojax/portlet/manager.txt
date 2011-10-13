@@ -443,4 +443,4 @@ Portlets render exception
   >>> leftColumn.portletIds = ('weather2',)
   >>> leftColumn.update()
   >>> print leftColumn.render()
-  <div class="zojax-portlet-manager">Portlets Rendering Error</div>
+  <div class="zojax-portlet-manager" kssattr:url="http://127.0.0.1/context.html/presentation/pm-left" kssattr:checkurl="http://127.0.0.1/portlets/left/check">Portlets Rendering Error</div>
