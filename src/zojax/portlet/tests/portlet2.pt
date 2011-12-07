@@ -1,1 +1,1 @@
-<div class="portlet">Portlet2, E-mail: <tal:block content="view/email"/></div>
+<div class="portlet" i18n:translate="">Portlet2, E-mail: <tal:block i18n:name="email" content="view/email"/></div>

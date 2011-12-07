@@ -1,1 +1,1 @@
-<div class="portlet">Portlet1</div>
+<div class="portlet" i18n:translate="">Portlet1</div>

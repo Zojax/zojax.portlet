@@ -1,5 +1,5 @@
 <tal:block i18n:domain="zojax.portlet">
-  <h2>Portlet managers</h2>
+  <h2 i18n:translate="">Portlet managers</h2>
 
   <div class="z-form-fieldset">
     <ul class="z-listing" tal:define="url view/context0/@@absolute_url">
