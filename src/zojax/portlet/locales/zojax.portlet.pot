@@ -1,0 +1,101 @@
+##############################################################################
+#
+# Copyright (c) 2003-2004 Zope Corporation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Thu Dec  8 23:13:55 2011\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/portlet/browser/editwizard.pt:2
+msgid "Portlet managers"
+msgstr ""
+
+#: src/zojax/portlet/browser/manager.pt:3
+msgid "Configure portlets"
+msgstr ""
+
+#: src/zojax/portlet/browser/manager.py:66
+msgid "Copy portlet settings from parent manager"
+msgstr ""
+
+#: src/zojax/portlet/browser/manager.py:70
+msgid "Setting has been copied"
+msgstr ""
+
+#: src/zojax/portlet/browser/portlet.pt:6
+msgid "Back to \"${managerTitle}\" portlets manager."
+msgstr ""
+
+#: src/zojax/portlet/browser/portletpreview.pt:1
+msgid "Preview"
+msgstr ""
+
+#: src/zojax/portlet/configproperty.py:121
+msgid "Can't set field"
+msgstr ""
+
+#: src/zojax/portlet/configproperty.py:126
+msgid "Field is readonly"
+msgstr ""
+
+#: src/zojax/portlet/configure.zcml:42
+msgid "Portlets configuration."
+msgstr ""
+
+#: src/zojax/portlet/configure.zcml:8
+msgid "Manage site portlets"
+msgstr ""
+
+#: src/zojax/portlet/interfaces.py:116
+#: src/zojax/portlet/configure.zcml:42
+msgid "Portlets"
+msgstr ""
+
+#: src/zojax/portlet/interfaces.py:128
+msgid "Status"
+msgstr ""
+
+#: src/zojax/portlet/interfaces.py:129
+msgid ""
+"\"Enabled\" -- set portlets at this level and do not inherit portlets from the manager one level up;\n"
+"\"Disabled\" -- don't display portlets that have been set for this manager and don't inherit portlets from the manager one level up. This action will result in no portlets being displayed;\n"
+"\"Unset\" -- inherit portlets from the manager one level up"
+msgstr ""
+
+#: src/zojax/portlet/interfaces.py:33
+msgid "Enabled"
+msgstr ""
+
+#: src/zojax/portlet/interfaces.py:34
+msgid "Disabled"
+msgstr ""
+
+#: src/zojax/portlet/interfaces.py:35
+msgid "Inherit"
+msgstr ""
+
+#: src/zojax/portlet/tests/portlet1.pt:1
+msgid "Portlet1"
+msgstr ""
+
+#: src/zojax/portlet/tests/portlet2.pt:1
+msgid "Portlet2, E-mail: ${email}"
+msgstr ""
+
