@@ -62,13 +62,15 @@ $(document).ready(function() {
     {
         var el = $(elems[i]);
         if (!el.attr('processed')) {
-            
+
             var handler = function(el) {
                 return function(data) {
-                    setPortletManagerEditLink(el);
+                    if (data=="Ok") {
+                        setPortletManagerEditLink(el);
+                    }
                 };
-            }     
-            $.get(el.attr('kssattr:checkurl'), handler(el))
+            }
+            $.get(el.attr('kssattr:checkurl'), handler(el));
         }
     }
 });
